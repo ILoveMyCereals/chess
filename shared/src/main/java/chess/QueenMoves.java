@@ -16,6 +16,7 @@ public class QueenMoves {
         ChessPosition upRightSpace = new ChessPosition(currentRow + 1, currentColumn + 1);
         ChessPosition downLeftSpace = new ChessPosition(currentRow - 1, currentColumn - 1);
         ChessPosition downRightSpace = new ChessPosition(currentRow - 1, currentColumn + 1);
+
         while (board.getPiece(upSpace) == null) {
             ChessMove newMove = new ChessMove(startPosition, upSpace, null);
             movesArray.add(newMove);
@@ -102,6 +103,9 @@ public class QueenMoves {
         }
         return movesArray;
     }
+
+    //public ChessMove moves_helper(ChessBoard new_board, int row, int column) {}
 }
 //ChessPiece.PieceType.QUEEN for promotion piece to promote to queen
 //use the ChessBoard.getPiece method and see if that is null to check if the space is a valid move or not
+//use helper method and pass in two integers, a row and a column

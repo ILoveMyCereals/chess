@@ -10,6 +10,9 @@ public class ChessMove {
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
+        startPos = startPosition;
+        endPos = endPosition;
+        promo = promotionPiece;
     }
 
     /**
@@ -38,4 +41,5 @@ public class ChessMove {
 
     private ChessPosition startPos;
     private ChessPosition endPos;
+    private ChessPiece.PieceType promo;
 }

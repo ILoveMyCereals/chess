@@ -1,6 +1,9 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Objects;
+
+import static chess.ChessPiece.PieceColor.WHITE;
 
 /**
  * Represents a single chess piece
@@ -10,9 +13,11 @@ import java.util.Collection;
  */
 public class ChessPiece {
 
-    private ChessPiece color1;
+    private ChessGame.TeamColor color1;
     private PieceType type1;
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        color1 = pieceColor;
+        type1 = type;
     }
 
     /**
@@ -36,9 +41,8 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+        return color1;
     }
-
     /**
      * @return which type of chess piece this piece is
      */
@@ -54,6 +58,28 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        Collection <ChessMove> movesList = BishopMoves.moves(board, myPosition);
+        return movesList;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "color1=" + color1 +
+                ", type1=" + type1 +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return Objects.equals(color1, that.color1) && type1 == that.type1;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color1, type1);
     }
 }
