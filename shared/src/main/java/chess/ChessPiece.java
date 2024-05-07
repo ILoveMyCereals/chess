@@ -58,8 +58,30 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection <ChessMove> movesList = BishopMoves.moves(board, myPosition);
-        return movesList;
+        if (type1 == PieceType.BISHOP) {
+            Collection<ChessMove> movesList = BishopMoves.moves(board, myPosition);
+            return movesList;
+        }
+        else if (type1 == PieceType.KNIGHT) {
+            Collection<ChessMove> movesList = KnightMoves.moves(board, myPosition);
+            return movesList;
+        }
+        else if (type1 == PieceType.ROOK) {
+            Collection<ChessMove> movesList = RookMoves.moves(board, myPosition);
+            return movesList;
+        }
+        else if (type1 == PieceType.KING) {
+            Collection<ChessMove> movesList = KingMoves.moves(board, myPosition);
+            return movesList;
+        }
+        else if (type1 == PieceType.QUEEN) {
+            Collection<ChessMove> movesList = QueenMoves.moves(board, myPosition);
+            return movesList;
+        }
+        else {
+            Collection<ChessMove> movesList = PawnMoves.moves(board, myPosition);
+            return movesList;
+        }
     }
 
     @Override

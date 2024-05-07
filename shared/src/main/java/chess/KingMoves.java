@@ -4,50 +4,36 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class KingMoves {
-    public Collection<ChessMove> moves(ChessBoard board, ChessPosition startPosition) {
+    public static Collection<ChessMove> moves(ChessBoard board, ChessPosition startPosition) {
         Collection<ChessMove> movesArray = new ArrayList<ChessMove>(Arrays.asList(new ChessMove[]{}));
-        int currentRow = startPosition.getRow();
-        int currentColumn = startPosition.getColumn();
-        ChessPosition upSpace = new ChessPosition(currentRow + 1, currentColumn);
-        ChessPosition downSpace = new ChessPosition(currentRow - 1, currentColumn);
-        ChessPosition leftSpace = new ChessPosition(currentRow, currentColumn - 1);
-        ChessPosition rightSpace = new ChessPosition(currentRow, currentColumn + 1);
-        ChessPosition upLeftSpace = new ChessPosition(currentRow + 1, currentColumn - 1);
-        ChessPosition upRightSpace = new ChessPosition(currentRow + 1, currentColumn + 1);
-        ChessPosition downLeftSpace = new ChessPosition(currentRow - 1, currentColumn - 1);
-        ChessPosition downRightSpace = new ChessPosition(currentRow - 1, currentColumn + 1);
-        if (board.getPiece(upSpace) == null || board.getPiece(upSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, upSpace, null);
-            movesArray.add(newMove);
+        Collection<ChessMove> upRightArray = moveHelper(board, startPosition, 1, 1, movesArray);
+        Collection<ChessMove> downRightArray = moveHelper(board, startPosition, -1, 1, upRightArray);
+        Collection<ChessMove> downLeftArray = moveHelper(board, startPosition, -1, -1, downRightArray);
+        Collection<ChessMove> upLeftArray = moveHelper(board, startPosition, 1, -1, downLeftArray);
+        Collection<ChessMove> upArray = moveHelper(board, startPosition, 1, 0, upLeftArray);
+        Collection<ChessMove> rightArray = moveHelper(board, startPosition, 0, 1, upArray);
+        Collection<ChessMove> downArray = moveHelper(board, startPosition, -1, 0, rightArray);
+        Collection<ChessMove> finalArray = moveHelper(board, startPosition, 0, -1, downArray);
+
+        return finalArray;
+    }
+    public static Collection<ChessMove> moveHelper(ChessBoard board, ChessPosition startPosition1, int rowInt, int colInt, Collection<ChessMove> currentArray) {
+        int currentRow = startPosition1.getRow();
+        int currentColumn = startPosition1.getColumn();
+
+        if (currentRow >= 1 && currentColumn >= 1 && currentRow <= 8 && currentColumn <= 8) {
+            ChessPosition nextSpace = new ChessPosition(currentRow + rowInt, currentColumn + colInt);
+            ChessMove newMove = new ChessMove(startPosition1, nextSpace, null);
+            if (nextSpace.getRow() >= 1 && nextSpace.getColumn() >= 1 && nextSpace.getRow() <= 8 && nextSpace.getColumn() <= 8) {
+                if (board.getPiece(nextSpace) == null) {
+                    currentArray.add(newMove);
+                } else {
+                    if (board.getPiece(nextSpace).getTeamColor() != board.getPiece(startPosition1).getTeamColor()) {
+                        currentArray.add(newMove);
+                    }
+                }
+            }
         }
-        if (board.getPiece(downSpace) == null || board.getPiece(downSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, downSpace, null);
-            movesArray.add(newMove);
-        }
-        if (board.getPiece(leftSpace) == null || board.getPiece(leftSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, leftSpace, null);
-            movesArray.add(newMove);
-        }
-        if (board.getPiece(rightSpace) == null || board.getPiece(rightSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, rightSpace, null);
-            movesArray.add(newMove);
-        }
-        if (board.getPiece(upLeftSpace) == null || board.getPiece(upLeftSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, upLeftSpace, null);
-            movesArray.add(newMove);
-        }
-        if (board.getPiece(upRightSpace) == null || board.getPiece(upRightSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, upRightSpace, null);
-            movesArray.add(newMove);
-        }
-        if (board.getPiece(downLeftSpace) == null || board.getPiece(downLeftSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, downLeftSpace, null);
-            movesArray.add(newMove);
-        }
-        if (board.getPiece(downRightSpace) == null || board.getPiece(downRightSpace).getTeamColor() != board.getPiece(startPosition).getTeamColor()) {
-            ChessMove newMove = new ChessMove(startPosition, downRightSpace, null);
-            movesArray.add(newMove);
-        }
-        return movesArray;
+        return currentArray;
     }
 }
