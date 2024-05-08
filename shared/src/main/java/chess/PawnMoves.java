@@ -37,11 +37,11 @@ public class PawnMoves {
                 ChessMove newMove = new ChessMove(startPosition, doubleUpSpace, null);
                 movesArray.add(newMove);
             }
-            if (board.getPiece(upLeftSpace) != null && board.getPiece(upLeftSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
+            if (currentColumn > 1 && board.getPiece(upLeftSpace) != null && board.getPiece(upLeftSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
                 ChessMove newMove = new ChessMove(startPosition, upLeftSpace, null);
                 movesArray.add(newMove);
             }
-            if (board.getPiece(upRightSpace) != null && board.getPiece(upRightSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
+            if (currentColumn < 8 && board.getPiece(upRightSpace) != null && board.getPiece(upRightSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
                 ChessMove newMove = new ChessMove(startPosition, upRightSpace, null);
                 movesArray.add(newMove);
             }
@@ -65,7 +65,7 @@ public class PawnMoves {
                 ChessMove newMove = new ChessMove(startPosition, doubleDownSpace, null);
                 movesArray.add(newMove);
             }
-            if (board.getPiece(downLeftSpace) != null && board.getPiece(downLeftSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
+            if (currentColumn > 1 && board.getPiece(downLeftSpace) != null && board.getPiece(downLeftSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
                 if (currentRow == 2) {
                     ChessMove queenPromote = new ChessMove(startPosition, downLeftSpace, ChessPiece.PieceType.QUEEN);
                     movesArray.add(queenPromote);
@@ -80,7 +80,7 @@ public class PawnMoves {
                     movesArray.add(newMove);
                 }
             }
-            if (board.getPiece(downRightSpace) != null && board.getPiece(downRightSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
+            if (currentColumn < 8 && board.getPiece(downRightSpace) != null && board.getPiece(downRightSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
                 if (currentRow == 2) {
                     ChessMove queenPromote = new ChessMove(startPosition, downRightSpace, ChessPiece.PieceType.QUEEN);
                     movesArray.add(queenPromote);
