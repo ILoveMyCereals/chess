@@ -71,8 +71,12 @@ public class ChessGame {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition newPosition = new ChessPosition(i, j);
                 ChessPiece newPiece = board.getPiece(newPosition);
+                if (newPiece != null && newPiece.getTeamColor() == teamColor && newPiece.getPieceType() == ChessPiece.PieceType.KING) {
+                    ChessPosition kingPosition = new ChessPosition(i, j);
+                }
             }
         }
+
         return true;
     }
 
