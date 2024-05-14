@@ -9,9 +9,10 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessGame {
+    private ChessBoard board;
 
     public ChessGame() {
-
+        board = new ChessBoard();
     }
 
     /**
@@ -66,7 +67,13 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition newPosition = new ChessPosition(i, j);
+                ChessPiece newPiece = board.getPiece(newPosition);
+            }
+        }
+        return true;
     }
 
     /**
