@@ -26,16 +26,18 @@ public class ChessBoard implements Cloneable {
         return Arrays.deepHashCode(board);
     }
 
-    public Object clone() throws CloneNotSupportedException {
+    @Override
+    public ChessBoard clone() throws CloneNotSupportedException {
         ChessBoard clonedBoard = (ChessBoard) super.clone();
 
-        ChessPiece[][] clonedArray = new ChessPiece[8][8];
+        //ChessPiece[][] clonedArray = new ChessPiece[8][8];
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
+                //If having issues with shallow copies of pieces, make clone method in ChessPiece and copy each piece before adding to new board
                 clonedBoard.addPiece(new ChessPosition(i, j), board[i - 1][j - 1]);
             }
         }
-        return clonedArray;
+        return clonedBoard;
 
     }
 

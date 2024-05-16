@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public class ChessGame {
     private ChessBoard board;
-    private TeamColor color1;
+    private TeamColor teamTurn;
 
     public ChessGame() {
         board = new ChessBoard();
@@ -21,16 +21,15 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        return color1;
+        return teamTurn;
     }
-
     /**
      * Set's which teams turn it is
      *
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        color1 = team;
+        teamTurn = team;
     }
 
     /**
@@ -54,7 +53,12 @@ public class ChessGame {
         Collection<ChessMove> startArray = newPiece.pieceMoves(board, startPosition);
         TeamColor color = newPiece.getTeamColor();
         for (ChessMove move : startArray) {
-            //copy the board?
+            try {
+                ChessBoard newBoard = board.clone();
+            }
+            catch (CloneNotSupportedException ex) {
+                return null;
+            }
         }
         return validMoves;
     }
@@ -68,6 +72,7 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         throw new RuntimeException("Not implemented");
     }
+    //MAKEMOVE WILL CALL VALIDMOVES, NOT THE OTHER WAY AROUND
 
     /**
      * Determines if the given team is in check
