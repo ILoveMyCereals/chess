@@ -12,7 +12,7 @@ import static chess.ChessPiece.PieceType.PAWN;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Cloneable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -24,6 +24,19 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board);
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        ChessBoard clonedBoard = (ChessBoard) super.clone();
+
+        ChessPiece[][] clonedArray = new ChessPiece[8][8];
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                clonedBoard.addPiece(new ChessPosition(i, j), board[i - 1][j - 1]);
+            }
+        }
+        return clonedArray;
+
     }
 
     private ChessPiece[][] board = new ChessPiece[8][8];
