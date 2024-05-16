@@ -55,6 +55,11 @@ public class ChessGame {
         for (ChessMove move : startArray) {
             try {
                 ChessBoard newBoard = board.clone();
+                newBoard.addPiece(move.getEndPosition(), newPiece);
+                newBoard.addPiece(move.getStartPosition(), null);
+                if (isInCheck(color) == false) {
+                    validMoves.add(move);
+                }
             }
             catch (CloneNotSupportedException ex) {
                 return null;
@@ -70,9 +75,12 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        ChessPosition startPosition = move.getStartPosition();
+        ChessPosition endPosition = move.getEndPosition();
+        ChessPiece newPiece = board.getPiece(startPosition);
+        board.addPiece(endPosition, newPiece);
+        board.addPiece(startPosition, null);
     }
-    //MAKEMOVE WILL CALL VALIDMOVES, NOT THE OTHER WAY AROUND
 
     /**
      * Determines if the given team is in check
@@ -136,7 +144,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board = board;
     }
 
     /**
@@ -145,6 +153,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
     }
 }
