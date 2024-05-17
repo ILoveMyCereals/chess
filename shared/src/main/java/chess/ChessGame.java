@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -15,6 +16,8 @@ public class ChessGame {
 
     public ChessGame() {
         board = new ChessBoard();
+        board.resetBoard();
+        teamTurn = TeamColor.WHITE;
     }
 
     /**
@@ -109,13 +112,13 @@ public class ChessGame {
         return false;
     }
 
-    public ChessPosition getKingPosition(TeamColor color) {
+    public ChessPosition getKingPosition(TeamColor teamColor) {
         ChessPosition kingPosition = null;
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition newPosition = new ChessPosition(i, j);
                 ChessPiece newPiece = board.getPiece(newPosition);
-                if (newPiece != null && newPiece.getTeamColor() == color && newPiece.getPieceType() == ChessPiece.PieceType.KING) {
+                if (newPiece != null && newPiece.getTeamColor() == teamColor && newPiece.getPieceType() == ChessPiece.PieceType.KING) {
                     kingPosition = new ChessPosition(i, j);
                 }
             }
@@ -172,5 +175,26 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "board=" + board +
+                ", teamTurn=" + teamTurn +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return Objects.equals(board, chessGame.board) && teamTurn == chessGame.teamTurn;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board, teamTurn);
     }
 }
