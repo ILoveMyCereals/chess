@@ -88,17 +88,9 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
+
     public boolean isInCheck(TeamColor teamColor) {
-        ChessPosition kingPosition = null;
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPosition newPosition = new ChessPosition(i, j);
-                ChessPiece newPiece = board.getPiece(newPosition);
-                if (newPiece != null && newPiece.getTeamColor() == teamColor && newPiece.getPieceType() == ChessPiece.PieceType.KING) {
-                    kingPosition = new ChessPosition(i, j);
-                }
-            }
-        }
+        ChessPosition kingPosition = getKingPosition(teamColor);
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition newPosition = new ChessPosition(i, j);
@@ -117,6 +109,20 @@ public class ChessGame {
         return false;
     }
 
+    public ChessPosition getKingPosition(TeamColor color) {
+        ChessPosition kingPosition = null;
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition newPosition = new ChessPosition(i, j);
+                ChessPiece newPiece = board.getPiece(newPosition);
+                if (newPiece != null && newPiece.getTeamColor() == color && newPiece.getPieceType() == ChessPiece.PieceType.KING) {
+                    kingPosition = new ChessPosition(i, j);
+                }
+            }
+        }
+        return kingPosition;
+    }
+
     /**
      * Determines if the given team is in checkmate
      *
@@ -124,7 +130,13 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = getKingPosition(teamColor);
+        if (isInCheck(teamColor) == true) {
+            if (validMoves(kingPosition).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
