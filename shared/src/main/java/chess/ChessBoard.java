@@ -28,7 +28,7 @@ public class ChessBoard implements Cloneable {
 
     @Override
     public ChessBoard clone() throws CloneNotSupportedException {
-        ChessBoard clonedBoard = (ChessBoard) super.clone();
+        ChessBoard clonedBoard = new ChessBoard();
 
         //ChessPiece[][] clonedArray = new ChessPiece[8][8];
         for (int i = 1; i <= 8; i++) {

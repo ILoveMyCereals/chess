@@ -46,7 +46,7 @@ public class PawnMoves {
                 movesArray.add(newMove);
             }
         } else if (board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-            if (board.getPiece(downSpace) == null) {
+            if (currentRow > 1 && board.getPiece(downSpace) == null) {
                 if (currentRow == 2) {
                     ChessMove queenPromote = new ChessMove(startPosition, downSpace, ChessPiece.PieceType.QUEEN);
                     movesArray.add(queenPromote);
@@ -65,7 +65,7 @@ public class PawnMoves {
                 ChessMove newMove = new ChessMove(startPosition, doubleDownSpace, null);
                 movesArray.add(newMove);
             }
-            if (currentColumn > 1 && board.getPiece(downLeftSpace) != null && board.getPiece(downLeftSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
+            if (currentRow > 1 && currentColumn > 1 && board.getPiece(downLeftSpace) != null && board.getPiece(downLeftSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
                 if (currentRow == 2) {
                     ChessMove queenPromote = new ChessMove(startPosition, downLeftSpace, ChessPiece.PieceType.QUEEN);
                     movesArray.add(queenPromote);
@@ -80,7 +80,7 @@ public class PawnMoves {
                     movesArray.add(newMove);
                 }
             }
-            if (currentColumn < 8 && board.getPiece(downRightSpace) != null && board.getPiece(downRightSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
+            if (currentRow > 1 && currentColumn < 8 && board.getPiece(downRightSpace) != null && board.getPiece(downRightSpace).getTeamColor() == ChessGame.TeamColor.WHITE) {
                 if (currentRow == 2) {
                     ChessMove queenPromote = new ChessMove(startPosition, downRightSpace, ChessPiece.PieceType.QUEEN);
                     movesArray.add(queenPromote);
