@@ -99,10 +99,20 @@ public class ChessGame {
         }
         if (validMoves(startPosition).contains(move)) {
             ChessPiece newPiece = board.getPiece(startPosition);
-            board.addPiece(endPosition, newPiece);
+            if (newPiece.getPieceType() == ChessPiece.PieceType.PAWN && move.getPromotionPiece() != null) {
+                ChessPiece promoPiece = new ChessPiece(teamTurn, move.getPromotionPiece());
+                board.addPiece(endPosition, promoPiece);
+            } else {
+                board.addPiece(endPosition, newPiece);
+            }
             board.addPiece(startPosition, null);
         } else {
             throw new InvalidMoveException("Invalid move");
+        }
+        if (teamTurn == TeamColor.BLACK) {
+            teamTurn = TeamColor.WHITE;
+        } else {
+            teamTurn = TeamColor.BLACK;
         }
     }
 
