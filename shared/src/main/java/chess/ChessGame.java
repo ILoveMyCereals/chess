@@ -26,6 +26,7 @@ public class ChessGame {
     public TeamColor getTeamTurn() {
         return teamTurn;
     }
+
     /**
      * Set's which teams turn it is
      *
@@ -58,8 +59,7 @@ public class ChessGame {
         ChessBoard board1;
         try {
             board1 = board.clone();
-        }
-        catch (CloneNotSupportedException ex) {
+        } catch (CloneNotSupportedException ex) {
             return null;
         }
         for (ChessMove move : startArray) {
@@ -71,8 +71,7 @@ public class ChessGame {
                     validMoves.add(move);
                 }
                 board = board1.clone();
-            }
-            catch (CloneNotSupportedException ex) {
+            } catch (CloneNotSupportedException ex) {
                 return null;
             }
         }
@@ -90,8 +89,7 @@ public class ChessGame {
         ChessBoard newBoard;
         try {
             newBoard = board.clone();
-        }
-        catch (CloneNotSupportedException ex) {
+        } catch (CloneNotSupportedException ex) {
             return;
         }
         ChessPosition startPosition = move.getStartPosition();
@@ -101,11 +99,11 @@ public class ChessGame {
         }
         if (validMoves(startPosition).contains(move)) {
             ChessPiece newPiece = board.getPiece(startPosition);
-            newBoard.addPiece(endPosition, newPiece);
-            newBoard.addPiece(startPosition, null);
+            board.addPiece(endPosition, newPiece);
+            board.addPiece(startPosition, null);
         } else {
             throw new InvalidMoveException("Invalid move");
-            }
+        }
     }
 
     /**
@@ -159,8 +157,7 @@ public class ChessGame {
         boolean inCheckmate = true;
         if (isInCheck(teamColor) == false) {
             return false;
-        }
-        else {
+        } else {
             for (int i = 1; i <= 8; i++) {
                 for (int j = 1; j <= 8; j++) {
                     ChessPosition newPosition = new ChessPosition(i, j);
@@ -187,8 +184,7 @@ public class ChessGame {
         boolean inStalemate = true;
         if (isInCheck(teamColor) == true) {
             return false;
-        }
-        else {
+        } else {
             for (int i = 1; i <= 8; i++) {
                 for (int j = 1; j <= 8; j++) {
                     ChessPosition newPosition = new ChessPosition(i, j);

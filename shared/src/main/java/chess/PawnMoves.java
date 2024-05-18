@@ -18,7 +18,7 @@ public class PawnMoves {
         ChessPosition downRightSpace = new ChessPosition(currentRow - 1, currentColumn + 1);
 
         if (board.getPiece(startPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-            if (board.getPiece(upSpace) == null) {
+            if (currentRow < 8 && board.getPiece(upSpace) == null) {
                 if (currentRow == 7) {
                     ChessMove queenPromote = new ChessMove(startPosition, upSpace, ChessPiece.PieceType.QUEEN);
                     movesArray.add(queenPromote);
@@ -37,11 +37,11 @@ public class PawnMoves {
                 ChessMove newMove = new ChessMove(startPosition, doubleUpSpace, null);
                 movesArray.add(newMove);
             }
-            if (currentColumn > 1 && board.getPiece(upLeftSpace) != null && board.getPiece(upLeftSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
+            if (currentRow < 8 && currentColumn > 1 && board.getPiece(upLeftSpace) != null && board.getPiece(upLeftSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
                 ChessMove newMove = new ChessMove(startPosition, upLeftSpace, null);
                 movesArray.add(newMove);
             }
-            if (currentColumn < 8 && board.getPiece(upRightSpace) != null && board.getPiece(upRightSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
+            if (currentRow < 8 && currentColumn < 8 && board.getPiece(upRightSpace) != null && board.getPiece(upRightSpace).getTeamColor() == ChessGame.TeamColor.BLACK) {
                 ChessMove newMove = new ChessMove(startPosition, upRightSpace, null);
                 movesArray.add(newMove);
             }
