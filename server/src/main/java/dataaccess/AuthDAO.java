@@ -1,4 +1,12 @@
 package dataaccess;
 
-public class AuthDAO {
+import model.AuthData;
+
+public interface AuthDAO {
+
+    String createAuth(String username);
+
+    AuthData verifyAuth(String authToken);
+
+    void deleteAuth(String authToken);
 }
