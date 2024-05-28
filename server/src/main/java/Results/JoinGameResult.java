@@ -1,4 +1,4 @@
 package Results;
 
-public record JoinGameResult() {
+public record JoinGameResult(String message, String error) {
 }

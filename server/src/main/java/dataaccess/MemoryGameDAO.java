@@ -42,5 +42,6 @@ public class MemoryGameDAO implements GameDAO {
             game.setWhiteUsername(username);
             return true;
         }
+        return false;
     }
 }

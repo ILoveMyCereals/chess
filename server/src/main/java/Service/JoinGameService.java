@@ -16,10 +16,14 @@ public class JoinGameService {
         if (verified != null) {
             GameData requestedGame = gameMemory.getGame(joinGameRequest.gameID());
             if (requestedGame != null) {
-                if (joinGameRequest.playerColor().equals("BLACK") && requestedGame.blackUsername() == null) {
-
+                boolean userSet = gameMemory.setTeamUser(requestedGame, verified.username(), joinGameRequest.playerColor());
+                if (userSet) {
+                    return new JoinGameResult(null, null);
                 }
             }
+        } else {
+            return new JoinGameResult("message", "Error: unauthorized");
         }
+        return new JoinGameResult("message", "bad request");
     }
 }
