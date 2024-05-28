@@ -2,7 +2,7 @@ package model;
 
 import chess.ChessGame;
 
-public class GameData() {
+public class GameData {
 
     private int gameID;
     private String whiteUsername;
