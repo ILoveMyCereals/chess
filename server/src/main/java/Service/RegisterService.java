@@ -14,7 +14,7 @@ public class RegisterService {
         if (getResult == null) {
             userMemory.createUser(req.username(), req.password(), req.email());
             String newAuth = authMemory.createAuth(req.username());
-            return new RegisterResult(getResult, newAuth);
+            return new RegisterResult(req.username(), newAuth);
         } else {
             return new RegisterResult("message", "Error: already taken");
         }

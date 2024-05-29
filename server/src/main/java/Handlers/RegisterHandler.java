@@ -24,6 +24,7 @@ public class RegisterHandler {
         }
         else {
             res.status(200);
+            res.body(result.username());
         }
         String json = ConvertJSON.toJSON(result);
         return json;
