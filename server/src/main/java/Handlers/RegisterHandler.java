@@ -35,7 +35,8 @@ public class RegisterHandler {
                 res.status(403);
             } else if (exception.message().equals("Error: bad request")) {
                 res.status(400);
-            }   // I can have several throw errors in my service/DAO, and I can have different conditionals here depending on the ex.getMessage()
+            }
+            // I can have several throw errors in my service/DAO, and I can have different conditionals here depending on the ex.getMessage()
             String json = ConvertJSON.toJSON(exception);
             return json;
         }
