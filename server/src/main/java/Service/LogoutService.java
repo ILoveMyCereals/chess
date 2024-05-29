@@ -2,6 +2,7 @@ package Service;
 
 import Results.LogoutResult;
 import Requests.LogoutRequest;
+import dataaccess.DataAccessException;
 import model.UserData;
 import model.AuthData;
 import dataaccess.MemoryUserDAO;
@@ -11,13 +12,13 @@ public class LogoutService {
 
     public LogoutService() {}
 
-    public LogoutResult logout(String authToken, MemoryUserDAO userMemory, MemoryAuthDAO authMemory) {
+    public LogoutResult logout(String authToken, MemoryUserDAO userMemory, MemoryAuthDAO authMemory) throws DataAccessException {
         AuthData verified = authMemory.verifyAuth(authToken);
         if (verified != null) {
             authMemory.deleteAuth(authToken);
             return new LogoutResult(null, null);
         } else {
-            return new LogoutResult("message", "Error: unauthorized");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 }
