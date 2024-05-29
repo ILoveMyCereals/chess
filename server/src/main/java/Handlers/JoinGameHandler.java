@@ -1,8 +1,10 @@
 package Handlers;
 
 import Requests.JoinGameRequest;
+import Results.ExceptionResult;
 import Results.JoinGameResult;
 import Service.JoinGameService;
+import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 
@@ -20,7 +22,23 @@ public class JoinGameHandler {
         JoinGameRequest joinGameReq = ConvertJSON.fromJSON(req.body(), JoinGameRequest.class);
         String authToken = req.headers("authorization");
         JoinGameService service = new JoinGameService();
-        JoinGameResult result = service.joinGame(joinGameReq, authToken, gameMemory, authMemory);
-        return ConvertJSON.toJSON(result);
+        try {
+            JoinGameResult result = service.joinGame(joinGameReq, authToken, gameMemory, authMemory);
+            res.status(200);
+            String json = ConvertJSON.toJSON(result);
+            return json;
+        }
+        catch (DataAccessException ex) {
+            ExceptionResult exception = new ExceptionResult(ex.getMessage());
+            if (exception.message().equals("Error: bad request")) {
+                res.status(400);
+            } else if (exception.message().equals("Error: unauthorized")) {
+                res.status(401);
+            } else if (exception.message().equals("Error: already taken")) {
+                res.status(403);
+            }
+            String json = ConvertJSON.toJSON(exception);
+            return json;
+        }
     }
 }

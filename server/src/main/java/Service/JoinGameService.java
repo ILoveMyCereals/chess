@@ -2,6 +2,7 @@ package Service;
 
 import Results.JoinGameResult;
 import Requests.JoinGameRequest;
+import dataaccess.DataAccessException;
 import model.GameData;
 import model.AuthData;
 import dataaccess.MemoryGameDAO;
@@ -11,19 +12,22 @@ public class JoinGameService {
 
     public JoinGameService() {}
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest, String authToken, MemoryGameDAO gameMemory, MemoryAuthDAO authMemory) {
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest, String authToken, MemoryGameDAO gameMemory, MemoryAuthDAO authMemory) throws DataAccessException {
         AuthData verified = authMemory.verifyAuth((authToken));
         if (verified != null) {
             GameData requestedGame = gameMemory.getGame(joinGameRequest.gameID());
             if (requestedGame != null) {
                 boolean userSet = gameMemory.setTeamUser(requestedGame, verified.username(), joinGameRequest.playerColor());
                 if (userSet) {
-                    return new JoinGameResult(null, null);
+                    return new JoinGameResult();
+                } else {
+                    throw new DataAccessException("Error: already taken");
                 }
+            } else {
+                throw new DataAccessException("Error: bad request");
             }
         } else {
-            return new JoinGameResult("message", "Error: unauthorized");
+            throw new DataAccessException("Error: unauthorized");
         }
-        return new JoinGameResult("message", "bad request");
     }
 }
