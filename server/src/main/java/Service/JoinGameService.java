@@ -16,7 +16,7 @@ public class JoinGameService {
         AuthData verified = authMemory.verifyAuth((authToken));
         if (verified != null) {
             GameData requestedGame = gameMemory.getGame(joinGameRequest.gameID());
-            if (requestedGame != null) {
+            if (requestedGame != null && joinGameRequest.playerColor() != null) {
                 boolean userSet = gameMemory.setTeamUser(requestedGame, verified.username(), joinGameRequest.playerColor());
                 if (userSet) {
                     return new JoinGameResult();

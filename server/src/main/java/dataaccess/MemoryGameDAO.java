@@ -34,6 +34,9 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     public boolean setTeamUser(GameData game, String username, String teamColor) {
+        if (teamColor == null) {
+            return false;
+        }
         if (teamColor.equals("BLACK") && game.getBlackUsername() == null) {
             game.setBlackUsername(username);
             return true;
