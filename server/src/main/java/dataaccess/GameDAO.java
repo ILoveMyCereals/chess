@@ -5,7 +5,7 @@ import model.GameData;
 
 public interface GameDAO {
 
-    ArrayList<GameData> listGames(String authToken);
+    ArrayList<GameData> listGames();
 
     Integer createGame();
 

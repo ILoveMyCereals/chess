@@ -1,4 +1,7 @@
 package Results;
 
-public record ListGamesResult(String message, String error) {
+import model.GameData;
+import java.util.ArrayList;
+
+public record ListGamesResult(ArrayList<GameData> games, String message, String error) {
 }

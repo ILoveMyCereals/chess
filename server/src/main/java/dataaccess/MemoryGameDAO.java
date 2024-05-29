@@ -13,8 +13,8 @@ public class MemoryGameDAO implements GameDAO {
 
     private ArrayList<GameData> games = new ArrayList<GameData>();
 
-    public ArrayList<GameData> listGames(String authToken) {
-        return null;
+    public ArrayList<GameData> listGames() {
+        return games;
     }
 
     public Integer createGame() {
