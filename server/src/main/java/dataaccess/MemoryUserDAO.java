@@ -33,4 +33,10 @@ public class MemoryUserDAO implements UserDAO {
         UserData newUser = new UserData(username, password, email);
         users.add(newUser);
     }
+
+    public void clearUsers() {
+        for (UserData user : users) {
+            users.remove(user);
+        }
+    }
 }

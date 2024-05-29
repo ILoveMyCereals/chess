@@ -5,6 +5,8 @@ import Handlers.LoginHandler;
 import Handlers.LogoutHandler;
 import Handlers.CreateGameHandler;
 import Handlers.JoinGameHandler;
+import Handlers.ClearHandler;
+import Handlers.ListGamesHandler;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
@@ -41,6 +43,12 @@ public class Server {
         ));
 
         Spark.put("/game", ((request, response) -> new JoinGameHandler(gameMemory, authMemory).handleRequest(request, response)
+        ));
+
+        Spark.delete("/db", ((request, response) -> new ClearHandler(userMemory, authMemory, gameMemory).handleRequest(request, response)
+        ));
+
+        Spark.get("/game", ((request, response) -> new ListGamesHandler(authMemory, gameMemory).handleRequest(request, response)
         ));
 
         Spark.awaitInitialization();

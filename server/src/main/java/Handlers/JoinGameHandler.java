@@ -18,7 +18,7 @@ public class JoinGameHandler {
 
     public Object handleRequest(spark.Request req, spark.Response res) {
         JoinGameRequest joinGameReq = ConvertJSON.fromJSON(req.body(), JoinGameRequest.class);
-        String authToken = req.headers("Authorization");
+        String authToken = req.headers("authorization");
         JoinGameService service = new JoinGameService();
         JoinGameResult result = service.joinGame(joinGameReq, authToken, gameMemory, authMemory);
         return ConvertJSON.toJSON(result);
