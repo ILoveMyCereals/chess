@@ -19,6 +19,12 @@ public class RegisterHandler {
         RegisterRequest registerReq = ConvertJSON.fromJSON(req.body(), RegisterRequest.class);
         RegisterService service  = new RegisterService();
         RegisterResult result = service.register(registerReq, userMemory, authMemory);
+        if (result.username() != null && result.username().equals("message")) {
+            res.status(400);
+        }
+        else {
+            res.status(200);
+        }
         String json = ConvertJSON.toJSON(result);
         return json;
 

@@ -20,8 +20,9 @@ public class LoginHandler {
         LoginRequest loginReq = ConvertJSON.fromJSON(req.body(), LoginRequest.class);
         LoginService service = new LoginService();
         LoginResult result = service.login(loginReq, userMemory, authMemory);
-        if (result.authToken().equals("Error: unauthorized")) {
+        if (result.authToken() != null && result.authToken().equals("Error: unauthorized")) {
             res.status(401);
+            res.body(result.authToken());
         }
         else {
             res.status(200);

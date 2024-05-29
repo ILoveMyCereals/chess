@@ -35,8 +35,6 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     public void clearUsers() {
-        for (UserData user : users) {
-            users.remove(user);
+        users.clear();
         }
     }
-}
