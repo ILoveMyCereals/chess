@@ -11,7 +11,7 @@ public class RegisterService {
 
     public RegisterResult register (RegisterRequest req, MemoryUserDAO userMemory, MemoryAuthDAO authMemory) {
         String getResult = userMemory.getUser(req.username());
-        if (getResult != null) {
+        if (getResult == null) {
             userMemory.createUser(req.username(), req.password(), req.email());
             String newAuth = authMemory.createAuth(req.username());
             return new RegisterResult(getResult, newAuth);
