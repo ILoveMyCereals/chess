@@ -7,9 +7,11 @@ import Handlers.CreateGameHandler;
 import Handlers.JoinGameHandler;
 import Handlers.ClearHandler;
 import Handlers.ListGamesHandler;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.*;
 import dataaccess.MemoryUserDAO;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.AuthData;
@@ -25,6 +27,48 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
+
+        DatabaseManager dbm = new DatabaseManager();
+
+        try {
+            dbm.createDatabase();
+            Connection newConn = dbm.getConnection();
+            var userTableStatement = """
+                CREATE TABLE IF NOT EXISTS Users (
+                username VARCHAR(255) NOT NULL, 
+                password VARCHAR(255) NOT NULL, 
+                email VARCHAR(255) NOT NULL, 
+                PRIMARY KEY (username)
+                )""";
+            var preparedUserStatement = newConn.prepareStatement(userTableStatement);
+            preparedUserStatement.executeUpdate();
+            var authTableStatement = """
+                    CREATE TABLE IF NOT EXISTS Auth (
+                    username VARCHAR(255) NOT NULL,
+                    authToken VARCHAR(255) NOT NULL,
+                    PRIMARY KEY (username)
+                    )""";
+            var preparedAuthStatement = newConn.prepareStatement(authTableStatement);
+            preparedAuthStatement.executeUpdate();
+            var gameTableStatement = """
+                    CREATE TABLE IF NOT EXISTS Game (
+                    gameName VARCHAR(255) NOT NULL,
+                    gameID int NOT NULL,
+                    blackUsername VARCHAR(255),
+                    whiteUsername VARCHAR(255),
+                    game ChessGame NOT NULL,
+                    PRIMARY KEY (gameName)
+                    )""";
+            var preparedGameStatement = newConn.prepareStatement(gameTableStatement);
+            preparedGameStatement.executeUpdate();
+
+        }
+        catch(DataAccessException ex) {
+
+        }
+        catch(java.sql.SQLException ex) {
+
+        }
 
         MemoryUserDAO userMemory = new MemoryUserDAO(new ArrayList<UserData>());
         MemoryAuthDAO authMemory = new MemoryAuthDAO(new ArrayList<AuthData>());
