@@ -12,7 +12,7 @@ public class CreateGameService {
 
     public CreateGameResult createGame(CreateGameRequest req, String authToken, MemoryGameDAO gameMemory, MemoryAuthDAO authMemory) throws DataAccessException {
         if (authMemory.verifyAuth(authToken) != null) {
-            return new CreateGameResult(gameMemory.createGame());
+            return new CreateGameResult(gameMemory.createGame(req.gameName()));
         } else {
             throw new DataAccessException("Error: unauthorized");
         }

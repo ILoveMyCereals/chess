@@ -17,10 +17,10 @@ public class MemoryGameDAO implements GameDAO {
         return games;
     }
 
-    public Integer createGame() {
+    public Integer createGame(String gameName) {
         Random rand = new Random();
         int newGameID = rand.nextInt(1000);
-        games.add(new GameData(newGameID, null, null, null, new ChessGame()));
+        games.add(new GameData(newGameID, null, null, gameName, new ChessGame()));
         return newGameID;
     }
 

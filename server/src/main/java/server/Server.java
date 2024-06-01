@@ -33,11 +33,12 @@ public class Server {
         try {
             dbm.createDatabase();
             Connection newConn = dbm.getConnection();
+            newConn.setCatalog("chess");
             var userTableStatement = """
                 CREATE TABLE IF NOT EXISTS Users (
-                username VARCHAR(255) NOT NULL, 
-                password VARCHAR(255) NOT NULL, 
-                email VARCHAR(255) NOT NULL, 
+                username VARCHAR(255) NOT NULL,
+                password longtext NOT NULL,
+                email VARCHAR(255) NOT NULL,
                 PRIMARY KEY (username)
                 )""";
             var preparedUserStatement = newConn.prepareStatement(userTableStatement);
@@ -70,9 +71,9 @@ public class Server {
 
         }
 
-        MemoryUserDAO userMemory = new MemoryUserDAO(new ArrayList<UserData>());
-        MemoryAuthDAO authMemory = new MemoryAuthDAO(new ArrayList<AuthData>());
-        MemoryGameDAO gameMemory = new MemoryGameDAO(new ArrayList<GameData>());
+        MemoryUserDAO userMemory = new MemoryUserDAO(new ArrayList<>());
+        MemoryAuthDAO authMemory = new MemoryAuthDAO(new ArrayList<>());
+        MemoryGameDAO gameMemory = new MemoryGameDAO(new ArrayList<>());
 
         Spark.post("/user", ((request, response) -> new RegisterHandler(userMemory, authMemory).handleRequest(request, response)
         ));
