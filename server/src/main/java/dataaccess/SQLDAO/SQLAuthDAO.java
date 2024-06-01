@@ -27,11 +27,16 @@ public class SQLAuthDAO implements AuthDAO {
         }
     }
 
-    public void deleteAuth(Connection conn, String authToken) throws SQLException {
-        return;
+    public void deleteAuth(Connection conn, String givenToken) throws SQLException {
+        try (var preparedStatement = conn.prepareStatement("DELETE FROM auth WHERE authToken=?")) {
+            preparedStatement.setString(1, givenToken);
+            preparedStatement.executeUpdate();
+        }
     }
 
     public void clearAuths(Connection conn) throws SQLException {
-        return;
+        try (var preparedStatement = conn.prepareStatement("DROP TABLE auth")) {
+            preparedStatement.executeUpdate();
+        }
     }
 }
