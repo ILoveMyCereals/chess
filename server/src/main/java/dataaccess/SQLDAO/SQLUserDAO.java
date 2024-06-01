@@ -15,8 +15,13 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-    public String getPassword(Connection conn, String username) throws SQLException {
-        return null;
+    public String getPassword(Connection conn, String givenName) throws SQLException {
+        try (var preparedStatement = conn.prepareStatement("SELECT password, FROM user, WHERE username = ?")) {
+            preparedStatement.setString(1, givenName);
+            var queryResult = preparedStatement.executeQuery();
+            var passResult = queryResult.getString("password");
+            return passResult;
+        }
     }
 
     public void createUser(Connection conn, String username, String password, String email) throws SQLException {
