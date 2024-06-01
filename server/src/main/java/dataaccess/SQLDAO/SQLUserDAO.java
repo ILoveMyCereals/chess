@@ -24,11 +24,18 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-    public void createUser(Connection conn, String username, String password, String email) throws SQLException {
-        return;
+    public void createUser(Connection conn, String givenName, String password, String email) throws SQLException {
+        try (var preparedStatement = conn.prepareStatement("INSERT INTO chess (user) VALUES(?, ?, ?)")) {
+            preparedStatement.setString(1, givenName);
+            preparedStatement.setString(2, password);
+            preparedStatement. setString(3, email);
+            preparedStatement.executeUpdate();
+        }
     }
 
-    public void clearUsers(Connection conn) {
-        return;
+    public void clearUsers(Connection conn) throws SQLException {
+        try (var preparedStatement = conn.prepareStatement("DROP TABLE user")) {
+            preparedStatement.executeUpdate();
+        }
     }
 }
