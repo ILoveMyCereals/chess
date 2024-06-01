@@ -57,7 +57,7 @@ public class Server {
                     gameID int NOT NULL,
                     blackUsername VARCHAR(255),
                     whiteUsername VARCHAR(255),
-                    game ChessGame NOT NULL,
+                    game LONGTEXT NOT NULL,
                     PRIMARY KEY (gameName)
                     )""";
             var preparedGameStatement = newConn.prepareStatement(gameTableStatement);
