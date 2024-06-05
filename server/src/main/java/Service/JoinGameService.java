@@ -17,6 +17,11 @@ public class JoinGameService {
     public JoinGameResult joinGame(JoinGameRequest joinGameRequest, String authToken, SQLGameDAO gameMemory, SQLAuthDAO authMemory) throws DataAccessException {
         try {
             AuthData verified = authMemory.verifyAuth((authToken));
+        } catch (SQLException ex) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+        try {
+            AuthData verified = authMemory.verifyAuth((authToken));
             if (verified != null) {
                 GameData requestedGame = gameMemory.getGame(joinGameRequest.gameID());
                 if (requestedGame != null && joinGameRequest.playerColor() != null) {
@@ -33,7 +38,7 @@ public class JoinGameService {
                 throw new DataAccessException("Error: unauthorized");
             }
         } catch (SQLException ex) {
-            return null;
+            throw new DataAccessException("Error: bad request");
         }
     }
 }

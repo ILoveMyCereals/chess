@@ -27,6 +27,9 @@ public class RegisterService {
             }
             return null;
         } catch (SQLException ex) {
+            if (req.username() == null || req.password() == null || req.email() == null) {
+                throw new DataAccessException("Error: bad request");
+            }
             try {
                 String hashPass = BCrypt.hashpw(req.password(), BCrypt.gensalt());
                 userMemory.createUser(req.username(), hashPass, req.email());

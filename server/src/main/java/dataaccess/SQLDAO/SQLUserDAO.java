@@ -13,6 +13,7 @@ public class SQLUserDAO implements UserDAO {
             try (var preparedStatement = conn.prepareStatement("SELECT username FROM Users WHERE username=?")) {
                 preparedStatement.setString(1, givenName);
                 var queryResult = preparedStatement.executeQuery();
+                queryResult.next();
                 var nameResult = queryResult.getString("username");
                 return nameResult;
             }
