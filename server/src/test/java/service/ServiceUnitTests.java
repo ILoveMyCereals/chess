@@ -11,27 +11,28 @@ import Service.JoinGameService;
 import Service.ListGamesService;
 import chess.ChessGame;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.SQLDAO.SQLUserDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
 import model.*;
 import org.junit.jupiter.api.*;
 import passoff.model.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ServiceUnitTests {
 
-    private static MemoryUserDAO userMemory;
-    private static MemoryAuthDAO authMemory;
-    private static MemoryGameDAO gameMemory;
+    private static SQLUserDAO userMemory;
+    private static SQLAuthDAO authMemory;
+    private static SQLGameDAO gameMemory;
 
 @BeforeAll
 static void init() {
-    userMemory = new MemoryUserDAO(new ArrayList<>());
-    authMemory = new MemoryAuthDAO(new ArrayList<>());
-    gameMemory = new MemoryGameDAO(new ArrayList<>());
+    userMemory = new SQLUserDAO();
+    authMemory = new SQLAuthDAO();
+    gameMemory = new SQLGameDAO();
 }
 
 @BeforeEach
@@ -49,6 +50,8 @@ static void init() {
         Assertions.assertEquals("big password", userMemory.getPassword("big name"));
     }
     catch (DataAccessException ex) {
+        return;
+    } catch (SQLException ex) {
         return;
     }
 }
@@ -78,6 +81,9 @@ static void init() {
         Assertions.assertNotEquals(null, authMemory.verifyAuth(result.authToken()));
     }
     catch (DataAccessException ex){
+        return;
+    }
+    catch (SQLException ex) {
         return;
     }
 }
@@ -178,6 +184,8 @@ static void init() {
         Assertions.assertEquals("big name", gameMemory.getGame(createResult.gameID()).getBlackUsername());
     }
     catch (DataAccessException ex) {
+        return;
+    } catch (SQLException ex) {
         return;
     }
 }

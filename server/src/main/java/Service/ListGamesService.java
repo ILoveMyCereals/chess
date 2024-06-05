@@ -4,22 +4,27 @@ import Results.ListGamesResult;
 import dataaccess.DataAccessException;
 import model.GameData;
 import model.AuthData;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryAuthDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ListGamesService {
 
     public ListGamesService() {}
 
-    public ListGamesResult listGames(String authToken, MemoryAuthDAO authMemory, MemoryGameDAO gameMemory) throws DataAccessException {
-        AuthData verified = authMemory.verifyAuth(authToken);
-        if (verified != null) {
-            ArrayList<GameData> games = gameMemory.listGames();
-            return new ListGamesResult(games, null, null);
-        }
-        else {
-            throw new DataAccessException("Error: unauthorized");
+    public ListGamesResult listGames(String authToken, SQLAuthDAO authMemory, SQLGameDAO gameMemory) throws DataAccessException {
+        try {
+            AuthData verified = authMemory.verifyAuth(authToken);
+            if (verified != null) {
+                ArrayList<GameData> games = gameMemory.listGames();
+                return new ListGamesResult(games, null, null);
+            } else {
+                throw new DataAccessException("Error: unauthorized");
+            }
+        } catch (SQLException ex) {
+            return null;
         }
     }
 }

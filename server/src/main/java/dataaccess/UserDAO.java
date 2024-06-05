@@ -7,9 +7,9 @@ public interface UserDAO {
 
 
 
-    String getUser(Connection conn, String username) throws SQLException;
+    String getUser(String username) throws SQLException;
 
-    String getPassword(Connection conn, String username) throws SQLException;
+    String getPassword(String username) throws SQLException;
 
-    void createUser(Connection conn, String username, String password, String email) throws SQLException;
+    void createUser(String username, String password, String email) throws SQLException;
 }

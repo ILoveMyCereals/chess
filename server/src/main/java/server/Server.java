@@ -9,7 +9,9 @@ import Handlers.ClearHandler;
 import Handlers.ListGamesHandler;
 import dataaccess.*;
 import dataaccess.MemoryUserDAO;
-
+import dataaccess.SQLDAO.SQLUserDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,19 +23,12 @@ import spark.*;
 
 public class Server {
 
-    public int run(int desiredPort) {
-        Spark.port(desiredPort);
-
-        Spark.staticFiles.location("web");
-
-        // Register your endpoints and handle exceptions here.
-
+    public Server () {
         DatabaseManager dbm = new DatabaseManager();
 
         try {
             dbm.createDatabase();
             Connection newConn = dbm.getConnection();
-            newConn.setCatalog("chess");
             var userTableStatement = """
                 CREATE TABLE IF NOT EXISTS Users (
                 username VARCHAR(255) NOT NULL,
@@ -65,15 +60,26 @@ public class Server {
 
         }
         catch(DataAccessException ex) {
-
+            System.out.println("Data Access Error");
         }
         catch(java.sql.SQLException ex) {
-
+            System.out.println("SQL Error");
         }
+    }
 
-        MemoryUserDAO userMemory = new MemoryUserDAO(new ArrayList<>());
-        MemoryAuthDAO authMemory = new MemoryAuthDAO(new ArrayList<>());
-        MemoryGameDAO gameMemory = new MemoryGameDAO(new ArrayList<>());
+    public int run(int desiredPort) {
+        Spark.port(desiredPort);
+
+        Spark.staticFiles.location("web");
+
+        // Register your endpoints and handle exceptions here.
+
+
+
+        SQLUserDAO userMemory = new SQLUserDAO();
+        SQLAuthDAO authMemory = new SQLAuthDAO();
+        SQLGameDAO gameMemory = new SQLGameDAO();
+
 
         Spark.post("/user", ((request, response) -> new RegisterHandler(userMemory, authMemory).handleRequest(request, response)
         ));

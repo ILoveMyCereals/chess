@@ -4,17 +4,17 @@ import Results.CreateGameResult;
 import Results.ExceptionResult;
 import Service.CreateGameService;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
 
 import javax.xml.crypto.Data;
 
 public class CreateGameHandler {
 
-    private MemoryGameDAO gameMemory;
-    private MemoryAuthDAO authMemory;
+    private SQLGameDAO gameMemory;
+    private SQLAuthDAO authMemory;
 
-    public CreateGameHandler(MemoryGameDAO gameMemory, MemoryAuthDAO authMemory) {
+    public CreateGameHandler(SQLGameDAO gameMemory, SQLAuthDAO authMemory) {
         this.gameMemory = gameMemory;
         this.authMemory = authMemory;
     }

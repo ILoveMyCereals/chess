@@ -5,17 +5,17 @@ import Results.ExceptionResult;
 import Results.ListGamesResult;
 import Service.ListGamesService;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
 
 import javax.xml.crypto.Data;
 
 public class ListGamesHandler {
 
-    private MemoryAuthDAO authMemory;
-    private MemoryGameDAO gameMemory;
+    private SQLAuthDAO authMemory;
+    private SQLGameDAO gameMemory;
 
-    public ListGamesHandler(MemoryAuthDAO authMemory, MemoryGameDAO gameMemory) {
+    public ListGamesHandler(SQLAuthDAO authMemory, SQLGameDAO gameMemory) {
         this.authMemory = authMemory;
         this.gameMemory = gameMemory;
     }

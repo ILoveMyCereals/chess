@@ -3,17 +3,17 @@ package Handlers;
 import Requests.ClearRequest;
 import Results.ClearResult;
 import Service.ClearService;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.SQLDAO.SQLUserDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
 
 public class ClearHandler {
 
-    private MemoryUserDAO userMemory;
-    private MemoryAuthDAO authMemory;
-    private MemoryGameDAO gameMemory;
+    private SQLUserDAO userMemory;
+    private SQLAuthDAO authMemory;
+    private SQLGameDAO gameMemory;
 
-    public ClearHandler (MemoryUserDAO userMemory, MemoryAuthDAO authMemory, MemoryGameDAO gameMemory) {
+    public ClearHandler (SQLUserDAO userMemory, SQLAuthDAO authMemory, SQLGameDAO gameMemory) {
         this.userMemory = userMemory;
         this.authMemory = authMemory;
         this.gameMemory = gameMemory;

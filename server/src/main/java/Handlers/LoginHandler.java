@@ -3,16 +3,16 @@ package Handlers;
 import Requests.LoginRequest;
 import Results.ExceptionResult;
 import Results.LoginResult;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLUserDAO;
 import Service.LoginService;
 
 public class LoginHandler {
 
-    private MemoryUserDAO userMemory;
-    private MemoryAuthDAO authMemory;
+    private SQLUserDAO userMemory;
+    private SQLAuthDAO authMemory;
 
-    public LoginHandler(MemoryUserDAO userMemory, MemoryAuthDAO authMemory) {
+    public LoginHandler(SQLUserDAO userMemory, SQLAuthDAO authMemory) {
         this.userMemory = userMemory;
         this.authMemory = authMemory;
     }

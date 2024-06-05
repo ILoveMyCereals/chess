@@ -5,15 +5,15 @@ import Results.ExceptionResult;
 import Results.JoinGameResult;
 import Service.JoinGameService;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLGameDAO;
 
 public class JoinGameHandler {
 
-    private MemoryGameDAO gameMemory;
-    private MemoryAuthDAO authMemory;
+    private SQLGameDAO gameMemory;
+    private SQLAuthDAO authMemory;
 
-    public JoinGameHandler(MemoryGameDAO gameMemory, MemoryAuthDAO authMemory) {
+    public JoinGameHandler(SQLGameDAO gameMemory, SQLAuthDAO authMemory) {
         this.gameMemory = gameMemory;
         this.authMemory = authMemory;
     }

@@ -4,15 +4,17 @@ import Results.RegisterResult;
 import Results.ExceptionResult;
 import Service.RegisterService;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLUserDAO;
+
+import java.sql.Connection;
 
 public class RegisterHandler {
 
-    private MemoryUserDAO userMemory;
-    private MemoryAuthDAO authMemory;
+    private SQLUserDAO userMemory;
+    private SQLAuthDAO authMemory;
 
-    public RegisterHandler(MemoryUserDAO userMemory, MemoryAuthDAO authMemory) {
+    public RegisterHandler(SQLUserDAO userMemory, SQLAuthDAO authMemory) {
         this.userMemory = userMemory;
         this.authMemory = authMemory;
     }

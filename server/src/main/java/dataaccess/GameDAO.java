@@ -7,11 +7,11 @@ import java.sql.SQLException;
 
 public interface GameDAO {
 
-    ArrayList<GameData> listGames(Connection conn) throws SQLException;
+    ArrayList<GameData> listGames() throws SQLException;
 
-    Integer createGame(Connection conn, String gameName) throws SQLException;
+    Integer createGame(String gameName) throws SQLException;
 
-    GameData getGame(Connection conn, Integer id) throws SQLException;
+    GameData getGame(Integer id) throws SQLException;
 
-    boolean setTeamUser(Connection conn, GameData game, String username, String teamColor) throws SQLException;
+    boolean setTeamUser(GameData game, String username, String teamColor) throws SQLException;
 }

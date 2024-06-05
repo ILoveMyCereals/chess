@@ -4,16 +4,16 @@ import Results.ExceptionResult;
 import Results.LogoutResult;
 import Service.LogoutService;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.SQLDAO.SQLUserDAO;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
 
 public class LogoutHandler {
 
-    private MemoryUserDAO userMemory;
-    private MemoryAuthDAO authMemory;
+    private SQLUserDAO userMemory;
+    private SQLAuthDAO authMemory;
 
-    public LogoutHandler(MemoryUserDAO userMemory, MemoryAuthDAO authMemory) {
+    public LogoutHandler(SQLUserDAO userMemory, SQLAuthDAO authMemory) {
         this.userMemory = userMemory;
         this.authMemory = authMemory;
     }

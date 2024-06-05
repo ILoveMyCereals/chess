@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public interface AuthDAO {
 
-    String createAuth(Connection conn, String username) throws SQLException;
+    String createAuth(String username) throws SQLException;
 
-    String verifyAuth(Connection conn, String authToken) throws SQLException;
+    AuthData verifyAuth(String authToken) throws SQLException;
 
-    void deleteAuth(Connection conn, String authToken) throws SQLException;
+    void deleteAuth(String authToken) throws SQLException;
 }
