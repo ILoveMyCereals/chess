@@ -27,7 +27,7 @@ public class LoginService {
                 String authToken = authMemory.getAuth(req.username());
                 return new LoginResult(req.username(), authToken);
             } catch (SQLException ex1) {
-                return null;
+                throw new DataAccessException("Error: unauthorized");
             }
         }
     }
