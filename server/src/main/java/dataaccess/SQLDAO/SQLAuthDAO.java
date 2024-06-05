@@ -12,7 +12,7 @@ public class SQLAuthDAO implements AuthDAO {
 
     public String getAuth(String givenName) throws SQLException {
         try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("SELECT authToken FROM auth WHERE givenName = ?")) {
+            try (var preparedStatement = conn.prepareStatement("SELECT authToken FROM auth WHERE username = ?")) {
                 preparedStatement.setString(1, givenName);
                 var queryResult = preparedStatement.executeQuery();
                 queryResult.next();
