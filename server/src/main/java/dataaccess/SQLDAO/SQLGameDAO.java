@@ -95,7 +95,7 @@ public class SQLGameDAO implements GameDAO {
             } else if (givenColor.equals("BLACK")) {
                 try (var conn = DatabaseManager.getConnection()) {
                     try (var preparedStatement = conn.prepareStatement("UPDATE Game SET blackUsername=? WHERE gameID=?")) {
-                        preparedStatement.setString(1, givenColor);
+                        preparedStatement.setString(1, givenName);
                         preparedStatement.setInt(2, game.getGameID());
                         preparedStatement.executeUpdate();
                         return true;

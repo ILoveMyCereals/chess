@@ -42,7 +42,8 @@ public class Server {
                     CREATE TABLE IF NOT EXISTS Auth (
                     username VARCHAR(255) NOT NULL,
                     authToken VARCHAR(255) NOT NULL,
-                    PRIMARY KEY (username)
+                    id int NOT NULL AUTO_INCREMENT,
+                    PRIMARY KEY (id)
                     )""";
             var preparedAuthStatement = newConn.prepareStatement(authTableStatement);
             preparedAuthStatement.executeUpdate();

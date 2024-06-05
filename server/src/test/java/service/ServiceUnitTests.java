@@ -16,6 +16,7 @@ import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLGameDAO;
 import model.*;
 import org.junit.jupiter.api.*;
+import org.mindrot.jbcrypt.BCrypt;
 import passoff.model.*;
 
 import java.sql.SQLException;
@@ -47,7 +48,7 @@ static void init() {
     RegisterService service = new RegisterService();
     try {
         RegisterResult result = service.register(new RegisterRequest("big name", "big password", "nathan15@gmail.com"), userMemory, authMemory);
-        Assertions.assertEquals("big password", userMemory.getPassword("big name"));
+        Assertions.assertTrue(BCrypt.checkpw("big password", userMemory.getPassword("big name")));
     }
     catch (DataAccessException ex) {
         return;

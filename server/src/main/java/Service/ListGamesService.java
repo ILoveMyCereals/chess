@@ -24,7 +24,7 @@ public class ListGamesService {
                 throw new DataAccessException("Error: unauthorized");
             }
         } catch (SQLException ex) {
-            return null;
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 }
