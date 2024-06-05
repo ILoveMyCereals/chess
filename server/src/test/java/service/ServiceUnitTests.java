@@ -9,7 +9,6 @@ import Service.LogoutService;
 import Service.CreateGameService;
 import Service.JoinGameService;
 import Service.ListGamesService;
-import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLUserDAO;
 import dataaccess.SQLDAO.SQLAuthDAO;
@@ -17,8 +16,6 @@ import dataaccess.SQLDAO.SQLGameDAO;
 import model.*;
 import org.junit.jupiter.api.*;
 import org.mindrot.jbcrypt.BCrypt;
-import passoff.model.*;
-
 import java.sql.SQLException;
 import java.util.*;
 
