@@ -1,15 +1,11 @@
 package dataaccess;
 
-import Requests.*;
-import Results.*;
 import Service.ClearService;
-import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLUserDAO;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLGameDAO;
 import model.*;
 import org.junit.jupiter.api.*;
-import org.mindrot.jbcrypt.BCrypt;
 import java.sql.SQLException;
 import java.util.*;
 
