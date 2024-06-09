@@ -7,7 +7,6 @@ import dataaccess.SQLDAO.SQLUserDAO;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class RegisterService {

@@ -1,10 +1,6 @@
 package Service;
 
 import Results.ClearResult;
-import Requests.ClearRequest;
-import model.GameData;
-import model.AuthData;
-import model.UserData;
 import dataaccess.SQLDAO.SQLUserDAO;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLGameDAO;

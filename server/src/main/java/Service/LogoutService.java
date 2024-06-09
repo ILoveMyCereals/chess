@@ -1,9 +1,7 @@
 package Service;
 
 import Results.LogoutResult;
-import Requests.LogoutRequest;
 import dataaccess.DataAccessException;
-import model.UserData;
 import model.AuthData;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLUserDAO;

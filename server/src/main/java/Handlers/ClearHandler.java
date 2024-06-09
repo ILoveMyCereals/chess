@@ -1,6 +1,5 @@
 package Handlers;
 
-import Requests.ClearRequest;
 import Results.ClearResult;
 import Service.ClearService;
 import dataaccess.SQLDAO.SQLUserDAO;

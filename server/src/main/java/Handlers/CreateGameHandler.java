@@ -7,8 +7,6 @@ import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLGameDAO;
 
-import javax.xml.crypto.Data;
-
 public class CreateGameHandler {
 
     private SQLGameDAO gameMemory;

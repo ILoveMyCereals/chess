@@ -7,8 +7,6 @@ import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLUserDAO;
 
-import java.sql.Connection;
-
 public class RegisterHandler {
 
     private SQLUserDAO userMemory;

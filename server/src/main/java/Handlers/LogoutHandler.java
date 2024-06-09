@@ -1,12 +1,10 @@
 package Handlers;
-import Requests.LogoutRequest;
 import Results.ExceptionResult;
 import Results.LogoutResult;
 import Service.LogoutService;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLUserDAO;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
 
 public class LogoutHandler {
 
