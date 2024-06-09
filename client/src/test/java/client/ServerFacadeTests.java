@@ -28,6 +28,8 @@ public class ServerFacadeTests {
 
     @Test
     @Order(1)
+    public void registerValidUser() {
 
+    }
 
 }
