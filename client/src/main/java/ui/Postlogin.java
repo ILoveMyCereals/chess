@@ -59,7 +59,7 @@ public class Postlogin {
                 JoinGameRequest req = new JoinGameRequest(playerColor, Integer.parseInt(gameID));
 
                 try {
-                    serverFacade.sendJoinGameRequest(req);
+                    serverFacade.sendJoinGameRequest(req, authToken);
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
@@ -70,7 +70,7 @@ public class Postlogin {
                 JoinGameRequest req = new JoinGameRequest(null, Integer.parseInt(gameID));
 
                 try {
-                    serverFacade.sendJoinGameRequest(req);
+                    serverFacade.sendJoinGameRequest(req, authToken);
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
@@ -78,7 +78,7 @@ public class Postlogin {
                 ListGamesRequest req = new ListGamesRequest();
 
                 try {
-                    serverFacade.sendListGamesRequest(req);
+                    serverFacade.sendListGamesRequest(req, authToken);
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }

@@ -1,10 +1,7 @@
 package net;
 
 import Requests.*;
-import Results.CreateGameResult;
-import Results.LoginResult;
-import Results.LogoutResult;
-import Results.RegisterResult;
+import Results.*;
 import com.google.gson.Gson;
 
 import java.io.InputStream;
@@ -106,33 +103,41 @@ public class ServerFacade {
         }
     }
 
-    public void sendJoinGameRequest(JoinGameRequest req) throws Exception {
+    public JoinGameResult sendJoinGameRequest(JoinGameRequest req, String authToken) throws Exception {
         URI uri = new URI(URISTUB + "/game");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("PUT");
+        http.addRequestProperty("authorization", authToken);
+        try (var outputStream = http.getOutputStream()) {
+            var json = new Gson().toJson(req);
+            outputStream.write(json.getBytes());
+        }
         //How do I set the request body?
 
         http.connect();
 
         try (InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            JoinGameResult res = new Gson().fromJson(inputStreamReader, JoinGameResult.class);
+            return res;
         }
     }
 
-    public void sendListGamesRequest(ListGamesRequest req) throws Exception {
+    public ListGamesResult sendListGamesRequest(ListGamesRequest req, String authToken) throws Exception {
         URI uri = new URI(URISTUB + "/game");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("GET");
+        http.addRequestProperty("authorization", authToken);
         //How do I set the request body?
 
         http.connect();
 
         try (InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            ListGamesResult res = new Gson().fromJson(inputStreamReader, ListGamesResult.class);
+            return res;
         }
     }
 }

@@ -2,6 +2,7 @@ package ui;
 
 import Requests.LoginRequest;
 import Requests.RegisterRequest;
+import Results.LoginResult;
 import Results.RegisterResult;
 import net.ServerFacade;
 
@@ -38,7 +39,9 @@ public class Prelogin {
                 LoginRequest req = new LoginRequest(username, password);
 
                 try {
-                    serverFacade.sendLoginRequest(req);
+                    LoginResult res = serverFacade.sendLoginRequest(req);
+                    String authToken = res.authToken();
+                    System.out.println("You are logged in as " + res.username());
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
