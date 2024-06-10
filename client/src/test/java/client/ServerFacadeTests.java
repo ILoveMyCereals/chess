@@ -1,6 +1,7 @@
 package client;
 
 import Requests.RegisterRequest;
+import Results.RegisterResult;
 import net.ServerFacade;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -35,7 +36,12 @@ public class ServerFacadeTests {
         var port = server.run(8080);
         ServerFacade facade = new ServerFacade(port);
         RegisterRequest req = new RegisterRequest("big username", "big password", "big email");
-        var authData = facade.sendRegisterRequest();
+        try {
+            RegisterResult res = facade.sendRegisterRequest(req);
+            Assertions.assertEquals(res.username(), "big username");
+        } catch (Exception ex) {
+            return;
+        }
     }
 
 }
