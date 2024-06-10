@@ -16,7 +16,7 @@ public class Prelogin {
 
     public void main(String[] args) {
         System.out.println("Welcome to Nathan \"the Trendsetter\" Smith's Wonderful World of Chess!");
-        while (option.equals("0")) {
+        while (option.equals("0") && authToken == null) {
             System.out.print("""
                     Please select an option and input the corresponding number to continue:
                                     
@@ -40,9 +40,10 @@ public class Prelogin {
 
                 try {
                     LoginResult res = serverFacade.sendLoginRequest(req);
-                    String authToken = res.authToken();
                     System.out.println("You are logged in as " + res.username());
-                    option = "0"; // RUN THE POSTLOGIN UI
+                    Postlogin postlogin = new Postlogin(res.username(), res.authToken());
+                    postlogin.loggedInUI();
+
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
@@ -64,9 +65,9 @@ public class Prelogin {
 
                 try {
                     RegisterResult res = serverFacade.sendRegisterRequest(req);
-                    authToken = res.authToken();
                     System.out.println("You have registered with the username" + res.username());
-                    option = "0"; //RUN THE POSTLOGIN UI
+                    Postlogin postlogin = new Postlogin(res.username(), res.authToken());
+                    postlogin.loggedInUI();
 
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());

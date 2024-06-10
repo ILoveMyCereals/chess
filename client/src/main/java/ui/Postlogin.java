@@ -112,8 +112,9 @@ public class Postlogin {
 
                 try {
                     LogoutResult res = serverFacade.sendLogoutRequest(req, authToken);
-                    System.out.println("You successfully logged out"); //SWAP TO PRELOGIN UI
+                    System.out.println("You successfully logged out");
                     authToken = null;
+                    return;
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }

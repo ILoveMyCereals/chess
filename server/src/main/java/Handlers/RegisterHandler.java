@@ -20,7 +20,6 @@ public class RegisterHandler {
     public Object handleRequest(spark.Request req, spark.Response res) {
         RegisterRequest registerReq = ConvertJSON.fromJSON(req.body(), RegisterRequest.class);
         RegisterService service  = new RegisterService();
-        //try/catch block here, any time the exception is thrown the catch block will execute
         try {
             RegisterResult result = service.register(registerReq, userMemory, authMemory);
             res.status(200);

@@ -31,18 +31,21 @@ public class ServerFacade {
             var json = new Gson().toJson(req);
             outputStream.write(json.getBytes());
         }
-        //How do I set the http request body?
-        //AddRequestProperty is used to add headers to the request
-        //turn the request object into a JSON and add it to the body using an output stream
 
         http.connect();
+        var status = http.getResponseCode();
+
+        if (status == 400) {
+            throw new Exception("Error: bad request");
+        } else if (status == 403) {
+            throw new Exception("Error: already taken");
+        }
 
         try(InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            //System.out.println(new Gson().fromJson(inputStreamReader, String.class));
-            // INSTEAD OF PRINTING, CREATE RESULT OBJECT AND SEND TO UI
             RegisterResult res = new Gson().fromJson(inputStreamReader, RegisterResult.class);
             return res;
+            //http.getResponseCode();
         }
     }
 
@@ -57,6 +60,11 @@ public class ServerFacade {
         }
 
         http.connect();
+        var status = http.getResponseCode();
+
+        if (status == 401) {
+            throw new Exception("Error: unauthorized");
+        }
 
         try(InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
@@ -74,6 +82,11 @@ public class ServerFacade {
         //How do I set the request body?
 
         http.connect();
+        var status = http.getResponseCode();
+
+        if (status == 401) {
+            throw new Exception("Error: unauthorized");
+        }
 
         try(InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
@@ -139,5 +152,13 @@ public class ServerFacade {
             ListGamesResult res = new Gson().fromJson(inputStreamReader, ListGamesResult.class);
             return res;
         }
+    }
+
+    public void sendClearRequest() throws Exception {
+        URI uri = new URI(URISTUB + "/db");
+        HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
+        http.setRequestMethod("DELETE");
+
+        http.connect();
     }
 }
