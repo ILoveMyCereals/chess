@@ -15,7 +15,11 @@ public class ServerFacade {
     //This class will take request type objects and will use them to generate HTTP requests, which it will send to the server (using code like in the Web Client example)
     //When a user logs in, this class will have to hold onto the authToken generated, because it will be needed for some of the HTTP requests
 
-    private final String URISTUB = "http://localhost:8080";
+    private String URISTUB;
+
+    public ServerFacade(Integer port) {
+        URISTUB = "http://localhost:" + Integer.toString(port);
+    }
 
     public void sendRegisterRequest(RegisterRequest req) throws Exception {
         URI uri = new URI(URISTUB + "/user");

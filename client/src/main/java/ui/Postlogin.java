@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Postlogin {
 
-    private ServerFacade serverFacade = new ServerFacade();
+    private ServerFacade serverFacade = new ServerFacade(8080);
     private String username;
     private String authToken;
     private String option = "0";
@@ -83,7 +83,14 @@ public class Postlogin {
                     System.out.print(ex.getMessage());
                 }
             } else if (option.equals("5")) {
-                return;
+                System.out.println("""
+                        1. Create game -- Input a name for a new chess game you want to create
+                        2. Join game -- Input the ID # for the chess game you wish to join and the color of the team you wish to play
+                        3. Observe game -- Input the ID # for the chess game you wish to observe
+                        4. List games -- Get a list of all current chess games
+                        5. Help -- Get additional information about each of the options
+                        6. Logout -- Log out of your account
+                        """);
             } else if (option.equals("6")) {
                 LogoutRequest req = new LogoutRequest();
 

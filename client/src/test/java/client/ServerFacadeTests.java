@@ -1,5 +1,7 @@
 package client;
 
+import Requests.RegisterRequest;
+import net.ServerFacade;
 import org.junit.jupiter.api.*;
 import server.Server;
 
@@ -11,7 +13,8 @@ public class ServerFacadeTests {
     @BeforeAll
     public static void init() {
         server = new Server();
-        var port = server.run(0);
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
         System.out.println("Started test HTTP server on " + port);
     }
 
@@ -29,7 +32,10 @@ public class ServerFacadeTests {
     @Test
     @Order(1)
     public void registerValidUser() {
-
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
+        RegisterRequest req = new RegisterRequest("big username", "big password", "big email");
+        var authData = facade.sendRegisterRequest();
     }
 
 }

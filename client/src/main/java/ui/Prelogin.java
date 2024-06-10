@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Prelogin {
 
     private String option = "0";
-    private ServerFacade serverFacade = new ServerFacade();
+    private ServerFacade serverFacade = new ServerFacade(8080);
 
     public void main(String[] args) {
         while (option.equals("0")) {
@@ -63,7 +63,12 @@ public class Prelogin {
                 }
 
             } else if (option.equals("3")) {
-                return;
+                System.out.println("""
+                        1. Login -- If you're a registered user, input your username and password to access your account
+                        2. Register -- If you're not registered, input a username, password and email to create an account
+                        3. Help -- Get additional information about each of the options
+                        4. Quit -- Leave the program
+                        """);
             } else if (option.equals("4")) {
                 System.exit(0);
             } else {
