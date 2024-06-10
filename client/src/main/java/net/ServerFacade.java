@@ -1,6 +1,7 @@
 package net;
 
 import Requests.*;
+import Results.RegisterResult;
 import com.google.gson.Gson;
 
 import java.io.InputStream;
@@ -21,7 +22,7 @@ public class ServerFacade {
         URISTUB = "http://localhost:" + Integer.toString(port);
     }
 
-    public void sendRegisterRequest(RegisterRequest req) throws Exception {
+    public RegisterResult sendRegisterRequest(RegisterRequest req) throws Exception {
         URI uri = new URI(URISTUB + "/user");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
@@ -32,7 +33,10 @@ public class ServerFacade {
 
         try(InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            //System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            // INSTEAD OF PRINTING, CREATE RESULT OBJECT AND SEND TO UI
+            RegisterResult res = new Gson().fromJson(inputStreamReader, RegisterResult.class);
+            return res;
         }
     }
 

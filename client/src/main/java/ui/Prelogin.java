@@ -2,6 +2,7 @@ package ui;
 
 import Requests.LoginRequest;
 import Requests.RegisterRequest;
+import Results.RegisterResult;
 import net.ServerFacade;
 
 import java.util.Scanner;
@@ -10,11 +11,12 @@ public class Prelogin {
 
     private String option = "0";
     private ServerFacade serverFacade = new ServerFacade(8080);
+    private String authToken;
 
     public void main(String[] args) {
+        System.out.println("Welcome to Nathan \"the Trendsetter\" Smith's Wonderful World of Chess!");
         while (option.equals("0")) {
             System.out.print("""
-                    Welcome to Nathan "the Trendsetter" Smith's Wonderful World of Chess!
                     Please select an option and input the corresponding number to continue:
                                     
                     1. Login
@@ -57,7 +59,12 @@ public class Prelogin {
                 RegisterRequest req = new RegisterRequest(username, password, email);
 
                 try {
-                    serverFacade.sendRegisterRequest(req);
+                    RegisterResult res = serverFacade.sendRegisterRequest(req);
+                    authToken = res.authToken();
+                    System.out.println("You have registered with the username" + res.username());
+                    option = "0";
+                    //THIS IS AN EXAMPLE FOR HOW IT SHOULD WORK
+
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
