@@ -7,6 +7,7 @@ import Requests.LogoutRequest;
 import Results.CreateGameResult;
 import Results.JoinGameResult;
 import Results.ListGamesResult;
+import Results.LogoutResult;
 import model.GameData;
 import net.ServerFacade;
 
@@ -110,7 +111,9 @@ public class Postlogin {
                 LogoutRequest req = new LogoutRequest();
 
                 try {
-                    serverFacade.sendLogoutRequest(req, authToken);
+                    LogoutResult res = serverFacade.sendLogoutRequest(req, authToken);
+                    System.out.println("You successfully logged out"); //SWAP TO PRELOGIN UI
+                    authToken = null;
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
