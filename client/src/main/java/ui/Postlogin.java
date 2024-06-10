@@ -4,6 +4,7 @@ import Requests.CreateGameRequest;
 import Requests.JoinGameRequest;
 import Requests.ListGamesRequest;
 import Requests.LogoutRequest;
+import Results.CreateGameResult;
 import net.ServerFacade;
 
 import java.util.Scanner;
@@ -44,7 +45,8 @@ public class Postlogin {
                 CreateGameRequest req = new CreateGameRequest(gameName);
 
                 try {
-                    serverFacade.sendCreateGameRequest(req, authToken);
+                    CreateGameResult res = serverFacade.sendCreateGameRequest(req, authToken);
+                    System.out.print("You have created a new game with the following ID: " + res.gameID());
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
