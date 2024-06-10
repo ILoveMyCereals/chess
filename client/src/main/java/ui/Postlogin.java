@@ -44,7 +44,7 @@ public class Postlogin {
                 CreateGameRequest req = new CreateGameRequest(gameName);
 
                 try {
-                    serverFacade.sendCreateGameRequest(req);
+                    serverFacade.sendCreateGameRequest(req, authToken);
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }

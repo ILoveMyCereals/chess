@@ -1,6 +1,9 @@
 package net;
 
 import Requests.*;
+import Results.CreateGameResult;
+import Results.LoginResult;
+import Results.LogoutResult;
 import Results.RegisterResult;
 import com.google.gson.Gson;
 
@@ -46,48 +49,60 @@ public class ServerFacade {
         }
     }
 
-    public void sendLoginRequest(LoginRequest req) throws Exception {
+    public LoginResult sendLoginRequest(LoginRequest req) throws Exception {
         URI uri = new URI(URISTUB + "/session");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("POST");
-        //How do I set the request body?
+        try (var outputStream = http.getOutputStream()) {
+            var json = new Gson().toJson(req);
+            outputStream.write(json.getBytes());
+        }
 
         http.connect();
 
         try(InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            LoginResult res = new Gson().fromJson(inputStreamReader, LoginResult.class);
+            return res;
         }
     }
 
-    public void sendLogoutRequest(LogoutRequest req, String authToken) throws Exception {
+    public LogoutResult sendLogoutRequest(LogoutRequest req, String authToken) throws Exception {
         URI uri = new URI(URISTUB + "/session");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("DELETE");
+        http.addRequestProperty("authorization", authToken);
         //How do I set the request body?
 
         http.connect();
 
         try(InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            LogoutResult res = new Gson().fromJson(inputStreamReader, LogoutResult.class);
+            return res;
         }
     }
 
-    public void sendCreateGameRequest(CreateGameRequest req) throws Exception {
+    public CreateGameResult sendCreateGameRequest(CreateGameRequest req, String authToken) throws Exception {
         URI uri = new URI(URISTUB + "/game");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("POST");
+        http.addRequestProperty("authorization", authToken);
+        try (var outputStream = http.getOutputStream()) {
+            var json = new Gson().toJson(req);
+            outputStream.write(json.getBytes());
+        }
         //How do I set the request body?
 
         http.connect();
 
         try (InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-            System.out.println(new Gson().fromJson(inputStreamReader, String.class));
+            CreateGameResult res = new Gson().fromJson(inputStreamReader, CreateGameResult.class);
+            return res;
         }
     }
 
