@@ -27,7 +27,13 @@ public class ServerFacade {
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("POST");
+        try (var outputStream = http.getOutputStream()) {
+            var json = new Gson().toJson(req);
+            outputStream.write(json.getBytes());
+        }
         //How do I set the http request body?
+        //AddRequestProperty is used to add headers to the request
+        //turn the request object into a JSON and add it to the body using an output stream
 
         http.connect();
 

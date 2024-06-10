@@ -33,8 +33,8 @@ public class ServerFacadeTests {
     @Test
     @Order(1)
     public void registerValidUser() {
-        var port = server.run(8080);
-        ServerFacade facade = new ServerFacade(port);
+        //var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(8080);
         RegisterRequest req = new RegisterRequest("big username", "big password", "big email");
         try {
             RegisterResult res = facade.sendRegisterRequest(req);
@@ -43,5 +43,43 @@ public class ServerFacadeTests {
             return;
         }
     }
+
+    @Test
+    @Order(2)
+    public void registerInvalidUser() {
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
+    }
+
+    @Test
+    @Order(3)
+    public void loginValidUser() {
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
+    }
+
+    @Test
+    @Order(4)
+    public void loginInvalidUser() {
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
+    }
+
+    @Test
+    @Order(5)
+    public void logoutValidIUser() {
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
+    }
+
+    @Test
+    @Order(6)
+    public void logoutInvalidUser() {
+        var port = server.run(8080);
+        ServerFacade facade = new ServerFacade(port);
+    }
+
+    //@Test
+    //@Order(7)
 
 }
