@@ -5,6 +5,9 @@ import Requests.JoinGameRequest;
 import Requests.ListGamesRequest;
 import Requests.LogoutRequest;
 import Results.CreateGameResult;
+import Results.JoinGameResult;
+import Results.ListGamesResult;
+import model.GameData;
 import net.ServerFacade;
 
 import java.util.Scanner;
@@ -61,7 +64,8 @@ public class Postlogin {
                 JoinGameRequest req = new JoinGameRequest(playerColor, Integer.parseInt(gameID));
 
                 try {
-                    serverFacade.sendJoinGameRequest(req, authToken);
+                    JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+                    System.out.print("You have successfully joined the game"); //CALL THE DRAW BOARD METHODS DEPENDING ON THE COLOR
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
@@ -72,7 +76,8 @@ public class Postlogin {
                 JoinGameRequest req = new JoinGameRequest(null, Integer.parseInt(gameID));
 
                 try {
-                    serverFacade.sendJoinGameRequest(req, authToken);
+                    JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+                    System.out.print("You are now observing the requested game"); //CALL THE DRAW BOARD METHOD
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
@@ -80,7 +85,15 @@ public class Postlogin {
                 ListGamesRequest req = new ListGamesRequest();
 
                 try {
-                    serverFacade.sendListGamesRequest(req, authToken);
+                    ListGamesResult res = serverFacade.sendListGamesRequest(req, authToken);
+                    for (GameData game : res.games()) {
+                        System.out.println(
+                                "Game Name" + game.getGameName() +
+                                        "\nGame ID" + game.getGameID() +
+                                        "\nWhite Team Player" + game.getWhiteUsername() +
+                                        "\nBlack Team Player" + game.getBlackUsername()
+                                );
+                    }
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
