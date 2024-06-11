@@ -43,23 +43,23 @@ public class DrawChessBoard {
 
     private static ArrayList<String> rows2 = new ArrayList<String>() {
         {
-            add("1");
-            add("2");
-            add("3");
-            add("4");
-            add("5");
-            add("6");
-            add("7");
             add("8");
+            add("7");
+            add("6");
+            add("5");
+            add("4");
+            add("3");
+            add("2");
+            add("1");
         }
     };
 
 
     public static void main(String[] args) {
-        drawChessBoard();
+        drawChessBoard("WHITE");
     }
 
-    public static void drawChessBoard() {
+    public static void drawChessBoard(String teamColor) {
         board.resetBoard();
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -80,7 +80,8 @@ public class DrawChessBoard {
 
         setBlack(out);
 
-        String[] headers = { "a", "b", "c", "d", "e", "f", "g", "h" };
+        String[] headers = {"a", "b", "c", "d", "e", "f", "g", "h"};
+        String[] headers2 = {"h", "g", "f", "e", "d", "c", "b", "a"};
         out.print(EMPTY);
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);

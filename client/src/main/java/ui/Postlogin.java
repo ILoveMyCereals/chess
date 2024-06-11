@@ -69,7 +69,7 @@ public class Postlogin {
                     JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
                     System.out.println("You have successfully joined the game");
                     DrawChessBoard draw = new DrawChessBoard();
-                    draw.drawChessBoard();
+                    draw.drawChessBoard(playerColor);
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
@@ -83,7 +83,7 @@ public class Postlogin {
                     JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
                     System.out.println("You are now observing the requested game");
                     DrawChessBoard draw = new DrawChessBoard();
-                    draw.drawChessBoard();
+                    draw.drawChessBoard("WHITE");
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
