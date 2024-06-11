@@ -66,17 +66,17 @@ public class DrawChessBoard {
 
         out.print(ERASE_SCREEN);
 
-        drawHeaders(out);
+        drawHeaders(out, teamColor);
 
-        drawTicTacToeBoard(out);
+        drawTicTacToeBoard(out, teamColor);
 
-        drawHeaders(out);
+        drawHeaders(out, teamColor);
 
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
     }
 
-    private static void drawHeaders(PrintStream out) {
+    private static void drawHeaders(PrintStream out, String teamColor) {
 
         setBlack(out);
 
@@ -84,7 +84,11 @@ public class DrawChessBoard {
         String[] headers2 = {"h", "g", "f", "e", "d", "c", "b", "a"};
         out.print(EMPTY);
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
-            drawHeader(out, headers[boardCol]);
+            if (teamColor.equals("WHITE")) {
+                drawHeader(out, headers[boardCol]);
+            } else if (teamColor.equals("BLACK")) {
+                drawHeader(out, headers2[boardCol]);
+            }
 
             if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
                 out.print(EMPTY.repeat(SQUARE_SIZE_IN_CHARS));
@@ -112,11 +116,11 @@ public class DrawChessBoard {
         setBlack(out);
     }
 
-    private static void drawTicTacToeBoard(PrintStream out) {
+    private static void drawTicTacToeBoard(PrintStream out, String teamColor) {
 
         for (int boardRow = 0; boardRow < BOARD_SIZE_IN_SQUARES; ++boardRow) {
 
-            drawRowOfSquares(out, boardRow);
+            drawRowOfSquares(out, boardRow, teamColor);
 
             if (boardRow < BOARD_SIZE_IN_SQUARES - 1) {
                 //drawVerticalLine(out);
@@ -125,11 +129,16 @@ public class DrawChessBoard {
         }
     }
 
-    private static void drawRowOfSquares(PrintStream out, int rowNum) {
+    private static void drawRowOfSquares(PrintStream out, int rowNum, String teamColor) {
 
         for (int squareRow = 0; squareRow < SQUARE_SIZE_IN_CHARS; ++squareRow) {
-            String nextNum = rows1.get(0);
-            printHeaderChar(out, nextNum);
+            if (teamColor.equals("WHITE")) {
+                String nextNum = rows1.get(0);
+                printHeaderChar(out, nextNum);
+            } else if (teamColor.equals("BLACK")) {
+                String nextNum = rows2.get(0);
+                printHeaderChar(out, nextNum);
+            }
 
             for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
                 setWhite(out);
@@ -164,26 +173,20 @@ public class DrawChessBoard {
                 setBlack(out);
             }
 
-            String nextRightNum = rows1.get(0);
-            printHeaderChar(out, nextRightNum);
-            rows1.remove(0);
+            if (teamColor.equals("WHITE")) {
+                String nextRightNum = rows1.get(0);
+                printHeaderChar(out, nextRightNum);
+                rows1.remove(0);
+            }
+            else if (teamColor.equals("BLACK")) {
+                String nextRightNum = rows2.get(0);
+                printHeaderChar(out, nextRightNum);
+                rows2.remove(0);
+            }
             out.println();
         }
     }
 
-    private static void drawVerticalLine(PrintStream out) {
-
-        int boardSizeInSpaces = BOARD_SIZE_IN_SQUARES * SQUARE_SIZE_IN_CHARS +
-                (BOARD_SIZE_IN_SQUARES - 1) * LINE_WIDTH_IN_CHARS;
-
-        for (int lineRow = 0; lineRow < LINE_WIDTH_IN_CHARS; ++lineRow) {
-            setRed(out);
-            out.print(EMPTY.repeat(boardSizeInSpaces));
-
-            setBlack(out);
-            out.println();
-        }
-    }
 
     private static void setWhite(PrintStream out) {
         out.print(SET_BG_COLOR_WHITE);

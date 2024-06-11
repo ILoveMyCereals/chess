@@ -172,12 +172,4 @@ public class ServerFacade {
             return res;
         }
     }
-
-    public void sendClearRequest() throws Exception {
-        URI uri = new URI(uristub + "/db");
-        HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
-        http.setRequestMethod("DELETE");
-
-        http.connect();
-    }
 }
