@@ -14,7 +14,11 @@ public class Prelogin {
     private ServerFacade serverFacade = new ServerFacade(8080);
     private String authToken;
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
+        //preloginUI();
+    }
+
+    public void preloginUI() {
         System.out.println("Welcome to Nathan \"the Trendsetter\" Smith's Wonderful World of Chess!");
         while (option.equals("0") && authToken == null) {
             System.out.print("""
@@ -30,10 +34,10 @@ public class Prelogin {
             option = newScan.nextLine();
 
             if (option.equals("1")) {
-                System.out.print("Please enter your username");
+                System.out.println("Please enter your username");
                 String username = newScan.nextLine();
 
-                System.out.print("Please enter your password");
+                System.out.println("Please enter your password");
                 String password = newScan.nextLine();
 
                 LoginRequest req = new LoginRequest(username, password);
@@ -55,17 +59,17 @@ public class Prelogin {
                         """);
                 String username = newScan.nextLine();
 
-                System.out.print("Please choose a password");
+                System.out.println("Please choose a password");
                 String password = newScan.nextLine();
 
-                System.out.print("Please input your email");
+                System.out.println("Please input your email");
                 String email = newScan.nextLine();
 
                 RegisterRequest req = new RegisterRequest(username, password, email);
 
                 try {
                     RegisterResult res = serverFacade.sendRegisterRequest(req);
-                    System.out.println("You have registered with the username" + res.username());
+                    System.out.println("You have registered with the username " + res.username());
                     Postlogin postlogin = new Postlogin(res.username(), res.authToken());
                     postlogin.loggedInUI();
 
@@ -80,6 +84,7 @@ public class Prelogin {
                         3. Help -- Get additional information about each of the options
                         4. Quit -- Leave the program
                         """);
+                option = "0";
             } else if (option.equals("4")) {
                 System.exit(0);
             } else {

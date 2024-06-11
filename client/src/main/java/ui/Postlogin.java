@@ -27,7 +27,7 @@ public class Postlogin {
 
     public void loggedInUI() {
         while (option.equals("0")) {
-            System.out.print("You are logged in as " + username);
+            System.out.println("You are logged in as " + username);
             System.out.print("""
                     Please select an option and input the corresponding number to continue:
                     
@@ -43,42 +43,45 @@ public class Postlogin {
             option = newScan.nextLine();
 
             if (option.equals("1")) {
-                System.out.print("Please enter a name for the game you're creating");
+                System.out.print("Please enter a name for the game you're creating ");
                 String gameName = newScan.nextLine();
 
                 CreateGameRequest req = new CreateGameRequest(gameName);
 
                 try {
                     CreateGameResult res = serverFacade.sendCreateGameRequest(req, authToken);
-                    System.out.print("You have created a new game with the following ID: " + res.gameID());
+                    System.out.println("You have created a new game with the following ID: " + res.gameID());
+                    option = "0";
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
 
             } else if (option.equals("2")) {
-                System.out.print("Please enter the game ID (not the game name) of the game you wish to join");
+                System.out.print("Please enter the game ID (not the game name) of the game you wish to join ");
                 String gameID = newScan.nextLine();
 
-                System.out.print("Please enter the color you wish to play (BLACK or WHITE)");
+                System.out.print("Please enter the color you wish to play (BLACK or WHITE) ");
                 String playerColor = newScan.nextLine();
 
                 JoinGameRequest req = new JoinGameRequest(playerColor, Integer.parseInt(gameID));
 
                 try {
                     JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
-                    System.out.print("You have successfully joined the game"); //CALL THE DRAW BOARD METHODS DEPENDING ON THE COLOR
+                    System.out.println("You have successfully joined the game");
+                    DrawChessBoard draw = new DrawChessBoard();
+                    draw.drawChessBoard();
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }
             } else if (option.equals("3")) {
-                System.out.print("Please enter the game ID (not the game name) of the game you wish to observe");
+                System.out.print("Please enter the game ID (not the game name) of the game you wish to observe ");
                 String gameID = newScan.nextLine();
 
                 JoinGameRequest req = new JoinGameRequest(null, Integer.parseInt(gameID));
 
                 try {
                     JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
-                    System.out.print("You are now observing the requested game"); //CALL THE DRAW BOARD METHOD
+                    System.out.println("You are now observing the requested game");
                     DrawChessBoard draw = new DrawChessBoard();
                     draw.drawChessBoard();
                 } catch (Exception ex) {
