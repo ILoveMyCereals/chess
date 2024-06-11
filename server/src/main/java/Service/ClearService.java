@@ -1,6 +1,6 @@
 package Service;
 
-import Results.ClearResult;
+import results.ClearResult;
 import dataaccess.SQLDAO.SQLUserDAO;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLGameDAO;

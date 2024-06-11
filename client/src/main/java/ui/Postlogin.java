@@ -1,13 +1,13 @@
 package ui;
 
-import Requests.CreateGameRequest;
-import Requests.JoinGameRequest;
-import Requests.ListGamesRequest;
-import Requests.LogoutRequest;
-import Results.CreateGameResult;
-import Results.JoinGameResult;
-import Results.ListGamesResult;
-import Results.LogoutResult;
+import requests.CreateGameRequest;
+import requests.JoinGameRequest;
+import requests.ListGamesRequest;
+import requests.LogoutRequest;
+import results.CreateGameResult;
+import results.JoinGameResult;
+import results.ListGamesResult;
+import results.LogoutResult;
 import model.GameData;
 import net.ServerFacade;
 
@@ -36,9 +36,7 @@ public class Postlogin {
                     3. Observe game
                     4. List games
                     5. Help
-                    6. Logout
-                    """);
-
+                    6. Logout""");
             Scanner newScan = new Scanner(System.in);
             option = newScan.nextLine();
 
@@ -110,8 +108,7 @@ public class Postlogin {
                         3. Observe game -- Input the ID # for the chess game you wish to observe
                         4. List games -- Get a list of all current chess games
                         5. Help -- Get additional information about each of the options
-                        6. Logout -- Log out of your account
-                        """);
+                        6. Logout -- Log out of your account""");
             } else if (option.equals("6")) {
                 LogoutRequest req = new LogoutRequest();
 

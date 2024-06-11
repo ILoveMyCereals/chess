@@ -1,8 +1,8 @@
 package Handlers;
 
-import Requests.LoginRequest;
-import Results.ExceptionResult;
-import Results.LoginResult;
+import requests.LoginRequest;
+import results.ExceptionResult;
+import results.LoginResult;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLUserDAO;
 import Service.LoginService;

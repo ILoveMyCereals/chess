@@ -1,6 +1,6 @@
 package Handlers;
-import Results.ExceptionResult;
-import Results.LogoutResult;
+import results.ExceptionResult;
+import results.LogoutResult;
 import Service.LogoutService;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;

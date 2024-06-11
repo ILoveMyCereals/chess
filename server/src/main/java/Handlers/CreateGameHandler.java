@@ -1,7 +1,7 @@
 package Handlers;
-import Requests.CreateGameRequest;
-import Results.CreateGameResult;
-import Results.ExceptionResult;
+import requests.CreateGameRequest;
+import results.CreateGameResult;
+import results.ExceptionResult;
 import Service.CreateGameService;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;

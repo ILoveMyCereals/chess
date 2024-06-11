@@ -1,8 +1,8 @@
 package Handlers;
 
-import Requests.JoinGameRequest;
-import Results.ExceptionResult;
-import Results.JoinGameResult;
+import requests.JoinGameRequest;
+import results.ExceptionResult;
+import results.JoinGameResult;
 import Service.JoinGameService;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;

@@ -1,7 +1,7 @@
 package Handlers;
 
-import Results.ExceptionResult;
-import Results.ListGamesResult;
+import results.ExceptionResult;
+import results.ListGamesResult;
 import Service.ListGamesService;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;

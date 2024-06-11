@@ -1,7 +1,7 @@
 package Handlers;
-import Requests.RegisterRequest;
-import Results.RegisterResult;
-import Results.ExceptionResult;
+import requests.RegisterRequest;
+import results.RegisterResult;
+import results.ExceptionResult;
 import Service.RegisterService;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;

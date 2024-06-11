@@ -1,6 +1,6 @@
 package Service;
 
-import Results.ListGamesResult;
+import results.ListGamesResult;
 import dataaccess.DataAccessException;
 import model.GameData;
 import model.AuthData;

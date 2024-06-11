@@ -1,7 +1,7 @@
 package service;
 
-import Requests.*;
-import Results.*;
+import requests.*;
+import results.*;
 import Service.ClearService;
 import Service.RegisterService;
 import Service.LoginService;

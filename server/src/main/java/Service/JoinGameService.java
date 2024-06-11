@@ -1,7 +1,7 @@
 package Service;
 
-import Results.JoinGameResult;
-import Requests.JoinGameRequest;
+import results.JoinGameResult;
+import requests.JoinGameRequest;
 import dataaccess.DataAccessException;
 import model.GameData;
 import model.AuthData;

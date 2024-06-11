@@ -1,7 +1,7 @@
 package Service;
 
-import Results.CreateGameResult;
-import Requests.CreateGameRequest;
+import results.CreateGameResult;
+import requests.CreateGameRequest;
 import dataaccess.DataAccessException;
 import dataaccess.SQLDAO.SQLAuthDAO;
 import dataaccess.SQLDAO.SQLGameDAO;
