@@ -79,7 +79,7 @@ public class Postlogin {
                 JoinGameRequest req = new JoinGameRequest(null, Integer.parseInt(gameID));
 
                 try {
-                    JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+                    //JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
                     DrawChessBoard draw = new DrawChessBoard();
                     draw.drawChessBoard("WHITE");
                     option = "0";
@@ -95,12 +95,13 @@ public class Postlogin {
                     ListGamesResult res = serverFacade.sendListGamesRequest(req, authToken);
                     for (GameData game : res.games()) {
                         System.out.println(
-                                "Game Name" + game.getGameName() +
-                                        "\nGame ID" + game.getGameID() +
-                                        "\nWhite Team Player" + game.getWhiteUsername() +
-                                        "\nBlack Team Player" + game.getBlackUsername()
+                                "Game Name: " + game.getGameName() +
+                                        "\nGame ID: " + game.getGameID() +
+                                        "\nWhite Team Player: " + game.getWhiteUsername() +
+                                        "\nBlack Team Player: " + game.getBlackUsername()
                                 );
                     }
+                    option = "0";
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     option = "0";

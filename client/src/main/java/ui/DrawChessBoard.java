@@ -28,7 +28,7 @@ public class DrawChessBoard {
     private static String squareColor = "GREY";
     private static ChessBoard board = new ChessBoard();
 
-    private static ArrayList<String> rows1 = new ArrayList<String>() {
+    private static ArrayList<String> rows2 = new ArrayList<String>() {
         {
             add("1");
             add("2");
@@ -41,7 +41,7 @@ public class DrawChessBoard {
         }
     };
 
-    private static ArrayList<String> rows2 = new ArrayList<String>() {
+    private static ArrayList<String> rows1 = new ArrayList<String>() {
         {
             add("8");
             add("7");
@@ -150,7 +150,7 @@ public class DrawChessBoard {
                     out.print(EMPTY.repeat(prefixLength));
                     ChessPosition currentPosition = new ChessPosition(rowNum + 1, boardCol + 1);
                     ChessPiece currentPiece = board.getPiece(currentPosition);
-                    printPlayer(out, currentPiece, squareColor);
+                    printPlayer(out, currentPiece, squareColor, teamColor);
                     if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
                         if (squareColor == "WHITE") {
                             squareColor = "GREY";
@@ -203,7 +203,7 @@ public class DrawChessBoard {
         out.print(SET_TEXT_COLOR_BLACK);
     }
 
-    private static void printPlayer(PrintStream out, ChessPiece piece, String squareColor) {
+    private static void printPlayer(PrintStream out, ChessPiece piece, String squareColor, String teamColor) {
         String player;
         if (squareColor == "GREY") {
             out.print(SET_BG_COLOR_WHITE);
@@ -218,9 +218,17 @@ public class DrawChessBoard {
 
         else {
             if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                out.print(SET_TEXT_COLOR_BLUE);
+                if (teamColor.equals("BLACK")) {
+                    out.print(SET_TEXT_COLOR_BLUE);
+                } else {
+                    out.print(SET_TEXT_COLOR_RED);
+                }
             } else {
-                out.print(SET_TEXT_COLOR_RED);
+                if (teamColor.equals("BLACK")) {
+                    out.print(SET_TEXT_COLOR_RED);
+                } else {
+                    out.print(SET_TEXT_COLOR_BLUE);
+                }
             }
             ChessPiece.PieceType type = piece.getPieceType();
 
@@ -233,9 +241,17 @@ public class DrawChessBoard {
             } else if (type == ChessPiece.PieceType.BISHOP) {
                 player = BISHOP;
             } else if (type == ChessPiece.PieceType.QUEEN) {
-                player = QUEEN;
+                if (teamColor.equals("WHITE")) {
+                    player = QUEEN;
+                } else {
+                    player = KING;
+                }
             } else if (type == ChessPiece.PieceType.KING) {
-                player = KING;
+                if (teamColor.equals("WHITE")) {
+                    player = KING;
+                } else {
+                    player = QUEEN;
+                }
             } else {
                 player = " ";
             }
