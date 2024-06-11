@@ -49,7 +49,8 @@ public class Prelogin {
                     postlogin.loggedInUI();
 
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
                 }
 
             } else if (option.equals("2")) {
@@ -74,7 +75,8 @@ public class Prelogin {
                     postlogin.loggedInUI();
 
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
                 }
 
             } else if (option.equals("3")) {

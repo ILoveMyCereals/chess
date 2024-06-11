@@ -50,7 +50,8 @@ public class Postlogin {
                     System.out.println("You have created a new game with the following ID: " + res.gameID());
                     option = "0";
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
                 }
 
             } else if (option.equals("2")) {
@@ -68,7 +69,8 @@ public class Postlogin {
                     draw.drawChessBoard(playerColor);
                     option = "0";
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
                 }
             } else if (option.equals("3")) {
                 System.out.println("Please enter the game ID (not the game name) of the game you wish to observe ");
@@ -82,7 +84,9 @@ public class Postlogin {
                     draw.drawChessBoard("WHITE");
                     option = "0";
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
+
                 }
             } else if (option.equals("4")) {
                 ListGamesRequest req = new ListGamesRequest();
@@ -98,7 +102,8 @@ public class Postlogin {
                                 );
                     }
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
                 }
             } else if (option.equals("5")) {
                 System.out.println("""
@@ -108,6 +113,7 @@ public class Postlogin {
                         4. List games -- Get a list of all current chess games
                         5. Help -- Get additional information about each of the options
                         6. Logout -- Log out of your account""");
+                option = "0";
             } else if (option.equals("6")) {
                 LogoutRequest req = new LogoutRequest();
 
@@ -117,7 +123,8 @@ public class Postlogin {
                     authToken = null;
                     return;
                 } catch (Exception ex) {
-                    System.out.print(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    option = "0";
                 }
             } else {
                 System.out.println("Invalid option");
