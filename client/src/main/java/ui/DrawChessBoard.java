@@ -56,7 +56,10 @@ public class DrawChessBoard {
 
 
     public static void main(String[] args) {
+        drawChessBoard();
+    }
 
+    public static void drawChessBoard() {
         board.resetBoard();
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);

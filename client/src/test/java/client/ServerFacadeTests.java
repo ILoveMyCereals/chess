@@ -14,10 +14,11 @@ import dataaccess.SQLDAO.SQLGameDAO;
 public class ServerFacadeTests {
 
     private static Server server;
+    private static ServerFacade facade;
 
     @BeforeEach
     void clearDB() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade();
         try {
             ClearService service = new ClearService();
             service.clear(new SQLUserDAO(), new SQLAuthDAO(), new SQLGameDAO());
@@ -31,7 +32,7 @@ public class ServerFacadeTests {
     public static void init() {
         server = new Server();
         var port = server.run(0);
-        ServerFacade facade = new ServerFacade(port);
+        facade = new ServerFacade(port);
         System.out.println("Started test HTTP server on " + port);
     }
 
@@ -49,7 +50,7 @@ public class ServerFacadeTests {
     @Test
     @Order(1)
     public void registerValidUser() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(8080);
         RegisterRequest req = new RegisterRequest("big username", "big password", "big email");
         try {
             RegisterResult res = facade.sendRegisterRequest(req);
@@ -62,7 +63,7 @@ public class ServerFacadeTests {
     @Test
     @Order(2)
     public void registerInvalidUser() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(8080);
         RegisterRequest req = new RegisterRequest("big username", null, "big email");
         try {
             RegisterResult res = facade.sendRegisterRequest(req);
@@ -74,7 +75,7 @@ public class ServerFacadeTests {
     @Test
     @Order(3)
     public void loginValidUser() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(8080);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         LoginRequest req1 = new LoginRequest("u", "p");
         try {
@@ -89,7 +90,7 @@ public class ServerFacadeTests {
     @Test
     @Order(4)
     public void loginInvalidUser() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         LoginRequest req1 = new LoginRequest("u", "not the password");
         try {
@@ -104,7 +105,7 @@ public class ServerFacadeTests {
     @Test
     @Order(5)
     public void logoutValidIUser() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         LogoutRequest req1 = new LogoutRequest();
 
@@ -119,7 +120,7 @@ public class ServerFacadeTests {
     @Test
     @Order(6)
     public void logoutInvalidUser() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         LogoutRequest req1 = new LogoutRequest();
 
@@ -134,7 +135,7 @@ public class ServerFacadeTests {
     @Test
     @Order(7)
     public void createValidGame() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         CreateGameRequest req1 = new CreateGameRequest("big game");
         try {
@@ -149,7 +150,7 @@ public class ServerFacadeTests {
     @Test
     @Order(8)
     public void createInvalidGame() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         CreateGameRequest req1 = new CreateGameRequest("big game");
         try {
@@ -163,7 +164,7 @@ public class ServerFacadeTests {
     @Test
     @Order(9)
     public void joinValidGame() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         CreateGameRequest req1 = new CreateGameRequest("big game");
         try {
@@ -180,7 +181,7 @@ public class ServerFacadeTests {
     @Test
     @Order(10)
     public void joinInvalidGame() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         CreateGameRequest req1 = new CreateGameRequest("big game");
         try {
@@ -196,7 +197,7 @@ public class ServerFacadeTests {
     @Test
     @Order(11)
     public void validListGames() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         CreateGameRequest req1 = new CreateGameRequest("big game");
         ListGamesRequest req2 = new ListGamesRequest();
@@ -213,7 +214,7 @@ public class ServerFacadeTests {
     @Test
     @Order(12)
     public void invalidListGames() {
-        ServerFacade facade = new ServerFacade(0);
+        //ServerFacade facade = new ServerFacade(0);
         RegisterRequest req = new RegisterRequest("u", "p", "big email");
         CreateGameRequest req1 = new CreateGameRequest("big game");
         ListGamesRequest req2 = new ListGamesRequest();
