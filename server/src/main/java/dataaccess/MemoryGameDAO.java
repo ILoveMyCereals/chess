@@ -24,9 +24,9 @@ public class MemoryGameDAO implements GameDAO {
         return newGameID;
     }
 
-    public GameData getGame(Integer ID) {
+    public GameData getGame(Integer id) {
         for (GameData game : games) {
-            if (game.getGameID() == ID) {
+            if (game.getGameID() == id) {
                 return game;
             }
         }

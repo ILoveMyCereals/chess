@@ -16,14 +16,14 @@ public class ServerFacade {
     //This class will take request type objects and will use them to generate HTTP requests, which it will send to the server (using code like in the Web Client example)
     //When a user logs in, this class will have to hold onto the authToken generated, because it will be needed for some of the HTTP requests
 
-    private String URISTUB;
+    private String uristub;
 
     public ServerFacade(Integer port) {
-        URISTUB = "http://localhost:" + Integer.toString(port);
+        uristub = "http://localhost:" + Integer.toString(port);
     }
 
     public RegisterResult sendRegisterRequest(RegisterRequest req) throws Exception {
-        URI uri = new URI(URISTUB + "/user");
+        URI uri = new URI(uristub + "/user");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("POST");
@@ -50,7 +50,7 @@ public class ServerFacade {
     }
 
     public LoginResult sendLoginRequest(LoginRequest req) throws Exception {
-        URI uri = new URI(URISTUB + "/session");
+        URI uri = new URI(uristub + "/session");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("POST");
@@ -74,7 +74,7 @@ public class ServerFacade {
     }
 
     public LogoutResult sendLogoutRequest(LogoutRequest req, String authToken) throws Exception {
-        URI uri = new URI(URISTUB + "/session");
+        URI uri = new URI(uristub + "/session");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("DELETE");
@@ -95,7 +95,7 @@ public class ServerFacade {
     }
 
     public CreateGameResult sendCreateGameRequest(CreateGameRequest req, String authToken) throws Exception {
-        URI uri = new URI(URISTUB + "/game");
+        URI uri = new URI(uristub + "/game");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("POST");
@@ -123,7 +123,7 @@ public class ServerFacade {
     }
 
     public JoinGameResult sendJoinGameRequest(JoinGameRequest req, String authToken) throws Exception {
-        URI uri = new URI(URISTUB + "/game");
+        URI uri = new URI(uristub + "/game");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("PUT");
@@ -152,7 +152,7 @@ public class ServerFacade {
     }
 
     public ListGamesResult sendListGamesRequest(ListGamesRequest req, String authToken) throws Exception {
-        URI uri = new URI(URISTUB + "/game");
+        URI uri = new URI(uristub + "/game");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setDoOutput(true);
         http.setRequestMethod("GET");
@@ -174,7 +174,7 @@ public class ServerFacade {
     }
 
     public void sendClearRequest() throws Exception {
-        URI uri = new URI(URISTUB + "/db");
+        URI uri = new URI(uristub + "/db");
         HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
         http.setRequestMethod("DELETE");
 
