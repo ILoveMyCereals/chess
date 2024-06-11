@@ -79,7 +79,6 @@ public class ServerFacade {
         http.setDoOutput(true);
         http.setRequestMethod("DELETE");
         http.addRequestProperty("authorization", authToken);
-        //How do I set the request body?
 
         http.connect();
         var status = http.getResponseCode();
@@ -108,6 +107,13 @@ public class ServerFacade {
         //How do I set the request body?
 
         http.connect();
+        var status = http.getResponseCode();
+
+        if (status == 400) {
+            throw new Exception("Error: bad request");
+        } else if (status == 401) {
+            throw new Exception("Error: unauthorized");
+        }
 
         try (InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
@@ -126,9 +132,17 @@ public class ServerFacade {
             var json = new Gson().toJson(req);
             outputStream.write(json.getBytes());
         }
-        //How do I set the request body?
 
         http.connect();
+        var status = http.getResponseCode();
+
+        if (status == 400) {
+            throw new Exception("Error: bad request");
+        } else if (status == 401) {
+            throw new Exception("Error: unauthorized");
+        } else if (status == 403) {
+            throw new Exception("Error: already taken");
+        }
 
         try (InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);
@@ -146,6 +160,11 @@ public class ServerFacade {
         //How do I set the request body?
 
         http.connect();
+        var status = http.getResponseCode();
+
+        if (status == 401) {
+            throw new Exception("Error: unauthorized");
+        }
 
         try (InputStream respBody = http.getInputStream()) {
             InputStreamReader inputStreamReader = new InputStreamReader(respBody);

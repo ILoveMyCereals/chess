@@ -79,6 +79,7 @@ public class Postlogin {
                 try {
                     JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
                     System.out.print("You are now observing the requested game"); //CALL THE DRAW BOARD METHOD
+                    //DrawChessBoard.main();
                 } catch (Exception ex) {
                     System.out.print(ex.getMessage());
                 }

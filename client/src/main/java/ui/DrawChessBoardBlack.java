@@ -12,7 +12,7 @@ import java.util.Random;
 
 import static ui.EscapeSequences.*;
 
-public class TicTacToe {
+public class DrawChessBoardBlack {
 
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final int SQUARE_SIZE_IN_CHARS = 1;
@@ -30,27 +30,27 @@ public class TicTacToe {
 
     private static ArrayList<String> rows1 = new ArrayList<String>() {
         {
-            add("1");
-            add("2");
-            add("3");
-            add("4");
-            add("5");
-            add("6");
-            add("7");
             add("8");
+            add("7");
+            add("6");
+            add("5");
+            add("4");
+            add("3");
+            add("2");
+            add("1");
         }
     };
 
     private static ArrayList<String> rows2 = new ArrayList<String>() {
         {
-            add("1");
-            add("2");
-            add("3");
-            add("4");
-            add("5");
-            add("6");
-            add("7");
             add("8");
+            add("7");
+            add("6");
+            add("5");
+            add("4");
+            add("3");
+            add("2");
+            add("1");
         }
     };
 
