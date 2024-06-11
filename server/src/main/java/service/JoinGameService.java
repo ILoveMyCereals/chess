@@ -1,12 +1,12 @@
-package Service;
+package service;
 
 import results.JoinGameResult;
 import requests.JoinGameRequest;
 import dataaccess.DataAccessException;
 import model.GameData;
 import model.AuthData;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 
 import java.sql.SQLException;
 

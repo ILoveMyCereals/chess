@@ -1,9 +1,9 @@
 package dataaccess;
 
-import Service.ClearService;
-import dataaccess.SQLDAO.SQLUserDAO;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import service.ClearService;
+import dataaccess.sqldao.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 import model.*;
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;

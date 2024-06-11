@@ -1,11 +1,11 @@
-package Handlers;
+package handlers;
 import requests.CreateGameRequest;
 import results.CreateGameResult;
 import results.ExceptionResult;
-import Service.CreateGameService;
+import service.CreateGameService;
 import dataaccess.DataAccessException;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 
 public class CreateGameHandler {
 

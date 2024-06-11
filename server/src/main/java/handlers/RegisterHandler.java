@@ -1,11 +1,11 @@
-package Handlers;
+package handlers;
 import requests.RegisterRequest;
 import results.RegisterResult;
 import results.ExceptionResult;
-import Service.RegisterService;
+import service.RegisterService;
 import dataaccess.DataAccessException;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLUserDAO;
 
 public class RegisterHandler {
 

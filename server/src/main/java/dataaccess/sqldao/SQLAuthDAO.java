@@ -1,10 +1,10 @@
-package dataaccess.SQLDAO;
+package dataaccess.sqldao;
 
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import model.AuthData;
-import java.sql.Connection;
+
 import java.sql.SQLException;
 import java.util.UUID;
 

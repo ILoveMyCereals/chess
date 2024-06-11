@@ -1,11 +1,11 @@
-package Handlers;
+package handlers;
 
 import requests.LoginRequest;
 import results.ExceptionResult;
 import results.LoginResult;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLUserDAO;
-import Service.LoginService;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLUserDAO;
+import service.LoginService;
 
 public class LoginHandler {
 

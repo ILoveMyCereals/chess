@@ -1,12 +1,12 @@
-package Handlers;
+package handlers;
 
 import requests.JoinGameRequest;
 import results.ExceptionResult;
 import results.JoinGameResult;
-import Service.JoinGameService;
+import service.JoinGameService;
 import dataaccess.DataAccessException;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 
 public class JoinGameHandler {
 

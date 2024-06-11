@@ -1,10 +1,10 @@
-package Service;
+package service;
 
 import results.LogoutResult;
 import dataaccess.DataAccessException;
 import model.AuthData;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLUserDAO;
 
 import java.sql.SQLException;
 

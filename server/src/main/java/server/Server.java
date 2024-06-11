@@ -1,24 +1,18 @@
 package server;
 
-import Handlers.RegisterHandler;
-import Handlers.LoginHandler;
-import Handlers.LogoutHandler;
-import Handlers.CreateGameHandler;
-import Handlers.JoinGameHandler;
-import Handlers.ClearHandler;
-import Handlers.ListGamesHandler;
+import handlers.RegisterHandler;
+import handlers.LoginHandler;
+import handlers.LogoutHandler;
+import handlers.CreateGameHandler;
+import handlers.JoinGameHandler;
+import handlers.ClearHandler;
+import handlers.ListGamesHandler;
 import dataaccess.*;
-import dataaccess.MemoryUserDAO;
-import dataaccess.SQLDAO.SQLUserDAO;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import dataaccess.sqldao.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
-import model.AuthData;
-import model.GameData;
-import model.UserData;
 import spark.*;
 
 public class Server {

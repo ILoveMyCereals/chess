@@ -1,11 +1,11 @@
-package Service;
+package service;
 
 import results.ListGamesResult;
 import dataaccess.DataAccessException;
 import model.GameData;
 import model.AuthData;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

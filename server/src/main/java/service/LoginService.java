@@ -1,10 +1,10 @@
-package Service;
+package service;
 
 import results.LoginResult;
 import requests.LoginRequest;
 import dataaccess.DataAccessException;
-import dataaccess.SQLDAO.SQLUserDAO;
-import dataaccess.SQLDAO.SQLAuthDAO;
+import dataaccess.sqldao.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;

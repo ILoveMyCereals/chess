@@ -5,10 +5,10 @@ import results.*;
 import net.ServerFacade;
 import org.junit.jupiter.api.*;
 import server.Server;
-import Service.ClearService;
-import dataaccess.SQLDAO.SQLUserDAO;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import service.ClearService;
+import dataaccess.sqldao.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ServerFacadeTests {

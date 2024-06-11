@@ -1,18 +1,16 @@
-package dataaccess.SQLDAO;
+package dataaccess.sqldao;
 
 import java.util.ArrayList;
 
-import Handlers.ConvertJSON;
+import handlers.ConvertJSON;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.GameDAO;
 import model.GameData;
-import java.sql.Connection;
+
 import java.sql.SQLException;
 import java.util.Random;
 import chess.ChessGame;
-
-import com.google.gson.Gson;
 
 public class SQLGameDAO implements GameDAO {
 

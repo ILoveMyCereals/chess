@@ -1,9 +1,9 @@
-package Service;
+package service;
 
 import results.ClearResult;
-import dataaccess.SQLDAO.SQLUserDAO;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLGameDAO;
+import dataaccess.sqldao.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLGameDAO;
 
 import java.sql.SQLException;
 

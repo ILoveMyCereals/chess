@@ -1,10 +1,10 @@
-package Handlers;
+package handlers;
 import results.ExceptionResult;
 import results.LogoutResult;
-import Service.LogoutService;
+import service.LogoutService;
 import dataaccess.DataAccessException;
-import dataaccess.SQLDAO.SQLAuthDAO;
-import dataaccess.SQLDAO.SQLUserDAO;
+import dataaccess.sqldao.SQLAuthDAO;
+import dataaccess.sqldao.SQLUserDAO;
 
 public class LogoutHandler {
 
