@@ -61,17 +61,25 @@ public class Postlogin {
                 System.out.println("Please enter the color you wish to play (BLACK or WHITE) ");
                 String playerColor = newScan.nextLine();
 
-                JoinGameRequest req = new JoinGameRequest(playerColor, Integer.parseInt(gameID));
-
+                ListGamesRequest req1 = new ListGamesRequest();
                 try {
-                    JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
-                    DrawChessBoard draw = new DrawChessBoard();
-                    draw.drawChessBoard(playerColor);
-                    option = "0";
+                    ListGamesResult res1 = serverFacade.sendListGamesRequest(req1, authToken);
+                    for (int counter = 0; counter < res1.games().size(); counter++) {
+                        GameData game = res1.games().get(counter);
+                        if (counter == Integer.parseInt(gameID)) {
+                            GameData savedGame = res1.games().get(counter);
+                            JoinGameRequest req = new JoinGameRequest(playerColor, savedGame.getGameID());
+                            JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+                            DrawChessBoard draw = new DrawChessBoard();
+                            draw.drawChessBoard(playerColor);
+                            option = "0";
+                        }
+                    }
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     option = "0";
                 }
+
             } else if (option.equals("3")) {
                 System.out.println("Please enter the game ID (not the game name) of the game you wish to observe ");
                 String gameID = newScan.nextLine();
@@ -93,10 +101,11 @@ public class Postlogin {
 
                 try {
                     ListGamesResult res = serverFacade.sendListGamesRequest(req, authToken);
-                    for (GameData game : res.games()) {
+                    for (int counter = 0; counter < res.games().size(); counter++) {
+                        GameData game = res.games().get(counter);
                         System.out.println(
                                 "Game Name: " + game.getGameName() +
-                                        "\nGame ID: " + game.getGameID() +
+                                        "\nGame ID: " + counter +
                                         "\nWhite Team Player: " + game.getWhiteUsername() +
                                         "\nBlack Team Player: " + game.getBlackUsername()
                                 );
@@ -122,7 +131,8 @@ public class Postlogin {
                     LogoutResult res = serverFacade.sendLogoutRequest(req, authToken);
                     System.out.println("You successfully logged out");
                     authToken = null;
-                    return;
+                    Prelogin prelogin = new Prelogin();
+                    prelogin.preloginUI();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     option = "0";

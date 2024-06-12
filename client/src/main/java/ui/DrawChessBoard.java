@@ -74,6 +74,9 @@ public class DrawChessBoard {
 
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
+
+        out.print(RESET_BG_COLOR);
+        out.print(RESET_TEXT_COLOR);
     }
 
     private static void drawHeaders(PrintStream out, String teamColor) {
@@ -94,6 +97,8 @@ public class DrawChessBoard {
                 out.print(EMPTY.repeat(SQUARE_SIZE_IN_CHARS));
             }
         }
+        out.print(EMPTY);
+        out.print(RESET_BG_COLOR);
 
         out.println();
     }
@@ -177,11 +182,13 @@ public class DrawChessBoard {
                 String nextRightNum = rows1.get(0);
                 printHeaderChar(out, nextRightNum);
                 rows1.remove(0);
+                out.print(RESET_BG_COLOR);
             }
             else if (teamColor.equals("BLACK")) {
                 String nextRightNum = rows2.get(0);
                 printHeaderChar(out, nextRightNum);
                 rows2.remove(0);
+                out.print(RESET_BG_COLOR);
             }
             out.println();
         }
