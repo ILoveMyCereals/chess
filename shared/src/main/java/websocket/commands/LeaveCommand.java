@@ -1,6 +1,6 @@
 package websocket.commands;
 
-public class LeaveCommand {
+public class LeaveCommand extends UserGameCommand {
 
     public LeaveCommand(Integer gameID) {this.gameID = gameID;}
 

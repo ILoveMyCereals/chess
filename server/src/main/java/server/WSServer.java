@@ -11,9 +11,7 @@ import spark.Spark;
 import dataaccess.sqldao.SQLUserDAO;
 import dataaccess.sqldao.SQLAuthDAO;
 import dataaccess.sqldao.SQLGameDAO;
-import websocket.commands.ConnectCommand;
-import websocket.commands.MakeMoveCommand;
-import websocket.commands.UserGameCommand;
+import websocket.commands.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -80,10 +78,27 @@ public class WSServer {
             }
 
         } else if (commandType == UserGameCommand.CommandType.LEAVE) {
-            return;
+            LeaveCommand secondCommand = ConvertJSON.fromJSON(message, LeaveCommand.class);
+
+            try {
+                String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+                for (Integer gameID : gameIDToAuth.keySet()) {
+                    if (gameID.equals(secondCommand.getGameID())) {
+                        String newAuth = gameIDToAuth.get(gameID);
+                        if (!newAuth.equals(secondCommand.getAuthString())) {
+                            Session newSession = authToSession.get(newAuth);
+                            newSession.getRemote().sendString(username + " has left the game");
+                        }
+                    }
+                }
+                gameIDToAuth.values().removeIf(authToken -> authToken.equals(secondCommand.getAuthString())); //IS THIS RIGHT?
+                authToSession.remove(secondCommand.getAuthString());
+            } catch (Exception ex) {
+                return;
+            }
 
         } else if (commandType == UserGameCommand.CommandType.RESIGN) {
-            return;
+            ResignCommand secondCommand = ConvertJSON.fromJSON(message, ResignCommand.class);
 
         }
     }
