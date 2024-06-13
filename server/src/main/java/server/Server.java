@@ -67,6 +67,8 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
+        Spark.webSocket("/ws", WSServer.class);
+
         // Register your endpoints and handle exceptions here.
 
 
