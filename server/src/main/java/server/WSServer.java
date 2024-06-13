@@ -1,9 +1,12 @@
 package server;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import chess.ChessPosition;
+import chess.InvalidMoveException;
 import dataaccess.sqldao.SQLAuthDAO;
 import handlers.ConvertJSON;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -12,6 +15,7 @@ import dataaccess.sqldao.SQLUserDAO;
 import dataaccess.sqldao.SQLAuthDAO;
 import dataaccess.sqldao.SQLGameDAO;
 import websocket.commands.*;
+import websocket.messages.ServerMessage;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -41,7 +45,6 @@ public class WSServer {
             authToSession.put(secondCommand.getAuthString(), session);
 
             try {
-                String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
@@ -61,16 +64,12 @@ public class WSServer {
             MakeMoveCommand secondCommand = ConvertJSON.fromJSON(message, MakeMoveCommand.class);
 
             try {
-                ChessGame game = gameDAO.getGame(secondCommand.getGameID()).getGame();
-                game.makeMove(secondCommand.getMove());
-                ChessPosition startPosition = secondCommand.getMove().getStartPosition();
-                ChessPosition endPosition = secondCommand.getMove().getEndPosition();
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
-                        Session newSession = authToSession.get(newAuth);
-                        session.getRemote().sendString(username + " moved from " + startPosition + " to " + endPosition); //idk if this will return the string the way I want it to
+                        Session newSession = authToSession.get(newAuth); // Instead of just these strings, I should create a ServerMessage object, serialize it to a JSON which will later be deserialized
+                        session.getRemote().sendString(username + " moved from " + startPosition + " to " + endPosition);
                     }
                 }
             } catch (Exception ex) {
@@ -81,6 +80,7 @@ public class WSServer {
             LeaveCommand secondCommand = ConvertJSON.fromJSON(message, LeaveCommand.class);
 
             try {
+                //I should make a new method in my gameDAO to remove a user from a game, and I'll call that method here
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
@@ -91,7 +91,7 @@ public class WSServer {
                         }
                     }
                 }
-                gameIDToAuth.values().removeIf(authToken -> authToken.equals(secondCommand.getAuthString())); //IS THIS RIGHT?
+                gameIDToAuth.values().removeIf(authToken -> authToken.equals(secondCommand.getAuthString())); //Is this right?
                 authToSession.remove(secondCommand.getAuthString());
             } catch (Exception ex) {
                 return;
@@ -101,5 +101,51 @@ public class WSServer {
             ResignCommand secondCommand = ConvertJSON.fromJSON(message, ResignCommand.class);
 
         }
+    }
+
+    private ServerMessage moveMessageGenerator(MakeMoveCommand command, SQLGameDAO gameDAO, SQLAuthDAO authDAO) {
+        String message;
+
+        ChessMove move = command.getMove();
+        ChessPosition startPosition = command.getMove().getStartPosition();
+        ChessPosition endPosition = command.getMove().getEndPosition();
+
+        try {
+            ChessGame.TeamColor defColor;
+
+            ChessGame game = gameDAO.getGame(command.getGameID()).getGame();
+            GameData gameData = gameDAO.getGame(command.getGameID());
+
+            String username = authDAO.verifyAuth(command.getAuthString()).username();
+            game.makeMove(move);
+            message = username + "has moved from " + startPosition + " to " + endPosition; //I still don't know if the positions will output how I want
+            if (game.getTeamTurn().equals(ChessGame.TeamColor.WHITE)) {
+                defColor = ChessGame.TeamColor.BLACK;
+            } else {
+                defColor = ChessGame.TeamColor.WHITE;
+            }
+            if (game.isInCheck(defColor)) {
+                if (defColor == ChessGame.TeamColor.BLACK) {
+                    message += "\n" + gameData.getBlackUsername() + "is in check";
+                } else {
+                    message += "\n" + gameData.getWhiteUsername() + "is in check";
+                }
+            } else if (game.isInCheckmate(defColor)) {
+                if (defColor == ChessGame.TeamColor.BLACK) {
+                    message += "\n" + gameData.getBlackUsername() + "is in checkmate";
+                } else {
+                    message += "\n" + gameData.getWhiteUsername() + "is in checkmate";
+                } //I need to figure out how to handle when a game ends
+            } else if (game.isInCheckmate(defColor) || game.isInCheckmate(game.getTeamTurn())) {
+                message += "\nThe game has ended in a stalemate.";
+            }
+
+        } catch (SQLException ex) {
+            return null;
+        } catch (InvalidMoveException ex) {
+            return null; //This is a case I'll definitely have to consider, return a message about an invalid move
+        }
+
+        return null;
     }
 }
