@@ -15,6 +15,7 @@ import dataaccess.sqldao.SQLUserDAO;
 import dataaccess.sqldao.SQLAuthDAO;
 import dataaccess.sqldao.SQLGameDAO;
 import websocket.commands.*;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 import java.sql.SQLException;
@@ -41,10 +42,12 @@ public class WSServer {
 
         if (commandType == UserGameCommand.CommandType.CONNECT) {
             ConnectCommand secondCommand = ConvertJSON.fromJSON(message, ConnectCommand.class);
+
             gameIDToAuth.put(secondCommand.getGameID(), secondCommand.getAuthString());
             authToSession.put(secondCommand.getAuthString(), session);
 
             try {
+                String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
@@ -54,6 +57,7 @@ public class WSServer {
                         }
                     }
                 }
+
                 //I still need to send a load game message to the user who joins
 
             } catch (Exception ex) {
@@ -64,12 +68,13 @@ public class WSServer {
             MakeMoveCommand secondCommand = ConvertJSON.fromJSON(message, MakeMoveCommand.class);
 
             try {
-                String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+                ServerMessage newMessage = moveMessageGenerator(secondCommand, gameDAO, authDAO);
+                String jsonMessage = ConvertJSON.toJSON(newMessage);
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
                         Session newSession = authToSession.get(newAuth); // Instead of just these strings, I should create a ServerMessage object, serialize it to a JSON which will later be deserialized
-                        session.getRemote().sendString(username + " moved from " + startPosition + " to " + endPosition);
+                        newSession.getRemote().sendString(jsonMessage);
                     }
                 }
             } catch (Exception ex) {
@@ -140,12 +145,12 @@ public class WSServer {
                 message += "\nThe game has ended in a stalemate.";
             }
 
+            return new NotificationMessage(message);
+
         } catch (SQLException ex) {
             return null;
         } catch (InvalidMoveException ex) {
-            return null; //This is a case I'll definitely have to consider, return a message about an invalid move
+            return null; //This is a case I'll definitely have to consider, return an error message about an invalid move
         }
-
-        return null;
     }
 }
