@@ -15,6 +15,7 @@ import dataaccess.sqldao.SQLUserDAO;
 import dataaccess.sqldao.SQLAuthDAO;
 import dataaccess.sqldao.SQLGameDAO;
 import websocket.commands.*;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
@@ -48,17 +49,23 @@ public class WSServer {
 
             try {
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+                NotificationMessage notification = new NotificationMessage(username + "has joined the game");
+                String jsonMessage = ConvertJSON.toJSON(notification);
+
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
                         if (!newAuth.equals(secondCommand.getAuthString())) {
                             Session newSession = authToSession.get(newAuth);
-                            newSession.getRemote().sendString(username + " has joined the game");
+                            newSession.getRemote().sendString(jsonMessage);
                         }
                     }
                 }
 
-                //I still need to send a load game message to the user who joins
+                ChessGame game = gameDAO.getGame(secondCommand.getGameID()).getGame();
+                LoadGameMessage loadMessage = new LoadGameMessage(game);
+                jsonMessage = ConvertJSON.toJSON(loadMessage);
+                Session.getRemote().sendString(jsonMessage); // Why am I getting this error?
 
             } catch (Exception ex) {
                 return;
@@ -70,6 +77,7 @@ public class WSServer {
             try {
                 ServerMessage newMessage = moveMessageGenerator(secondCommand, gameDAO, authDAO);
                 String jsonMessage = ConvertJSON.toJSON(newMessage);
+
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);

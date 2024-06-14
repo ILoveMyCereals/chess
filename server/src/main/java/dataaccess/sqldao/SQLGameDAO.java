@@ -109,6 +109,19 @@ public class SQLGameDAO implements GameDAO {
         return false;
     }
 
+    public void dropUser(ChessGame.TeamColor teamColor, GameData game) throws SQLException {
+        try (var conn = DatabaseManager.getConnection()) {
+            if (teamColor == ChessGame.TeamColor.BLACK) {
+                try (var preapredStatement = conn.prepareStatement("UPDATE Game SET blackusername=null WHERE gameID = ?")) {
+                    preapredStatement.setInt(1, game.getGameID());
+                    preapredStatement.executeUpdate();
+                }
+            }
+        } catch (DataAccessException ex) {
+            return;
+        }
+    }
+
     public void clearGames() throws SQLException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("TRUNCATE TABLE Game")) {
