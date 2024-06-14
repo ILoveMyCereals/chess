@@ -4,7 +4,12 @@ import chess.ChessMove;
 
 public class MakeMoveCommand extends UserGameCommand {
 
-    public MakeMoveCommand(Integer gameID, ChessMove move) {this.gameID = gameID; this.move = move;}
+    public MakeMoveCommand(Integer gameID, ChessMove move) {
+
+        this.gameID = gameID;
+        this.move = move;}
+
+    CommandType commandType = CommandType.MAKE_MOVE;
 
     Integer gameID;
 

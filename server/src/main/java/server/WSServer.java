@@ -65,7 +65,7 @@ public class WSServer {
                 ChessGame game = gameDAO.getGame(secondCommand.getGameID()).getGame();
                 LoadGameMessage loadMessage = new LoadGameMessage(game);
                 jsonMessage = ConvertJSON.toJSON(loadMessage);
-                Session.getRemote().sendString(jsonMessage); // Why am I getting this error?
+                session.getRemote().sendString(jsonMessage);
 
             } catch (Exception ex) {
                 return;
@@ -81,7 +81,7 @@ public class WSServer {
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
-                        Session newSession = authToSession.get(newAuth); // Instead of just these strings, I should create a ServerMessage object, serialize it to a JSON which will later be deserialized
+                        Session newSession = authToSession.get(newAuth);
                         newSession.getRemote().sendString(jsonMessage);
                     }
                 }
@@ -93,14 +93,19 @@ public class WSServer {
             LeaveCommand secondCommand = ConvertJSON.fromJSON(message, LeaveCommand.class);
 
             try {
-                //I should make a new method in my gameDAO to remove a user from a game, and I'll call that method here
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+                GameData game = gameDAO.getGame(secondCommand.getGameID());
+                if (username.equals(game.getWhiteUsername())) {
+                    gameDAO.dropUser(ChessGame.TeamColor.WHITE, game);
+                } else {
+                    gameDAO.dropUser(ChessGame.TeamColor.BLACK, game);
+                }
                 for (Integer gameID : gameIDToAuth.keySet()) {
                     if (gameID.equals(secondCommand.getGameID())) {
                         String newAuth = gameIDToAuth.get(gameID);
                         if (!newAuth.equals(secondCommand.getAuthString())) {
                             Session newSession = authToSession.get(newAuth);
-                            newSession.getRemote().sendString(username + " has left the game");
+                            newSession.getRemote().sendString(username + " has left the game"); //I still need to make this a json
                         }
                     }
                 }
@@ -112,6 +117,8 @@ public class WSServer {
 
         } else if (commandType == UserGameCommand.CommandType.RESIGN) {
             ResignCommand secondCommand = ConvertJSON.fromJSON(message, ResignCommand.class);
+            //What do I do when a game ends?
+            //I can implement a boolean flag indicating whether or not the game is in play
 
         }
     }
@@ -131,7 +138,7 @@ public class WSServer {
 
             String username = authDAO.verifyAuth(command.getAuthString()).username();
             game.makeMove(move);
-            message = username + "has moved from " + startPosition + " to " + endPosition; //I still don't know if the positions will output how I want
+            message = username + "has moved from " + startPosition + " to " + endPosition; //I should modify the toString() method in my ChessPosition class, or implement a new method within that class
             if (game.getTeamTurn().equals(ChessGame.TeamColor.WHITE)) {
                 defColor = ChessGame.TeamColor.BLACK;
             } else {

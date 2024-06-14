@@ -14,7 +14,7 @@ public class UserGameCommand {
         this.authToken = authToken;
     }
 
-    public UserGameCommand() {authToken = null;}
+    //public UserGameCommand() {authToken = null;}
 
     public enum CommandType {
         CONNECT,

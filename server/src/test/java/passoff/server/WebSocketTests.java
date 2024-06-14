@@ -1,13 +1,12 @@
-package passoff.server.server;
+package passoff.server;
 
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestFactory;
+import passoff.server.TestFactory;
 import passoff.model.*;
-import passoff.server.TestServerFacade;
 import passoff.websocket.TestCommand;
 import passoff.websocket.TestMessage;
 import passoff.websocket.WebsocketTestingEnvironment;
@@ -46,7 +45,7 @@ public class WebSocketTests {
         serverFacade = new TestServerFacade("localhost", port);
         serverFacade.clear();
 
-        GsonBuilder gsonBuilder = org.junit.jupiter.api.TestFactory.getGsonBuilder();
+        GsonBuilder gsonBuilder = TestFactory.getGsonBuilder();
         environment = new WebsocketTestingEnvironment("localhost", port, "/ws", gsonBuilder);
 
         waitTime = TestFactory.getMessageTime();

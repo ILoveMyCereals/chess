@@ -21,8 +21,6 @@ public class ServerMessage {
         this.serverMessageType = type;
     }
 
-    public ServerMessage() {serverMessageType = null;}
-
     public ServerMessageType getServerMessageType() {
         return this.serverMessageType;
     }
