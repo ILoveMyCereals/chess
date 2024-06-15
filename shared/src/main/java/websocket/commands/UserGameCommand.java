@@ -14,8 +14,6 @@ public class UserGameCommand {
         this.authToken = authToken;
     }
 
-    //public UserGameCommand() {authToken = null;}
-
     public enum CommandType {
         CONNECT,
         MAKE_MOVE,

@@ -26,7 +26,7 @@ import java.util.Map;
 @WebSocket
 public class WSServer {
 
-    private Map <Integer, String> gameIDToAuth = new HashMap<>();
+    private Map <String, Integer> authToGameID = new HashMap<>(); // I need to change this to authToGameID, the way I have it now only allows one user per game
     private Map <String, Session> authToSession = new HashMap<>();
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class WSServer {
         if (commandType == UserGameCommand.CommandType.CONNECT) {
             ConnectCommand secondCommand = ConvertJSON.fromJSON(message, ConnectCommand.class);
 
-            gameIDToAuth.put(secondCommand.getGameID(), secondCommand.getAuthString());
+            authToGameID.put(secondCommand.getAuthString(), secondCommand.getGameID());
             authToSession.put(secondCommand.getAuthString(), session);
 
             try {
@@ -52,18 +52,16 @@ public class WSServer {
                 NotificationMessage notification = new NotificationMessage(username + "has joined the game");
                 String jsonMessage = ConvertJSON.toJSON(notification);
 
-                for (Integer gameID : gameIDToAuth.keySet()) {
-                    if (gameID.equals(secondCommand.getGameID())) {
-                        String newAuth = gameIDToAuth.get(gameID);
-                        if (!newAuth.equals(secondCommand.getAuthString())) {
+                for (String newAuth : authToGameID.keySet()) {
+                    Integer gameID = authToGameID.get(newAuth);
+                    if (gameID.equals(secondCommand.getGameID()) && !newAuth.equals(secondCommand.getAuthString())) {
                             Session newSession = authToSession.get(newAuth);
                             newSession.getRemote().sendString(jsonMessage);
-                        }
                     }
                 }
 
-                ChessGame game = gameDAO.getGame(secondCommand.getGameID()).getGame();
-                LoadGameMessage loadMessage = new LoadGameMessage(game);
+                GameData game = gameDAO.getGame(secondCommand.getGameID());
+                LoadGameMessage loadMessage = new LoadGameMessage(game.getGame());
                 jsonMessage = ConvertJSON.toJSON(loadMessage);
                 session.getRemote().sendString(jsonMessage);
 
