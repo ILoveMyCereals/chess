@@ -15,10 +15,12 @@ import dataaccess.sqldao.SQLUserDAO;
 import dataaccess.sqldao.SQLAuthDAO;
 import dataaccess.sqldao.SQLGameDAO;
 import websocket.commands.*;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +46,15 @@ public class WSServer {
         if (commandType == UserGameCommand.CommandType.CONNECT) {
             ConnectCommand secondCommand = ConvertJSON.fromJSON(message, ConnectCommand.class);
 
-            authToGameID.put(secondCommand.getAuthString(), secondCommand.getGameID());
-            authToSession.put(secondCommand.getAuthString(), session);
 
             try {
+                GameData game = gameDAO.getGame(secondCommand.getGameID());
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
-                NotificationMessage notification = new NotificationMessage(username + "has joined the game");
+
+                authToGameID.put(secondCommand.getAuthString(), secondCommand.getGameID());
+                authToSession.put(secondCommand.getAuthString(), session);
+
+                NotificationMessage notification = new NotificationMessage(username + " has joined the game");
                 String jsonMessage = ConvertJSON.toJSON(notification);
 
                 for (String newAuth : authToGameID.keySet()) {
@@ -60,13 +65,18 @@ public class WSServer {
                     }
                 }
 
-                GameData game = gameDAO.getGame(secondCommand.getGameID());
                 LoadGameMessage loadMessage = new LoadGameMessage(game.getGame());
                 jsonMessage = ConvertJSON.toJSON(loadMessage);
                 session.getRemote().sendString(jsonMessage);
 
-            } catch (Exception ex) {
-                return;
+            } catch (Exception ex) { //WebSocketException
+                ErrorMessage errorMessage = new ErrorMessage("Error: bad request"); //I should handle both bad gameID and invalid authToken errors
+                String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                try {
+                    session.getRemote().sendString(jsonMessage);
+                } catch (IOException ex1) {
+                    return;
+                }
             }
 
         } else if (commandType == UserGameCommand.CommandType.MAKE_MOVE) {
@@ -109,7 +119,7 @@ public class WSServer {
                         newSession.getRemote().sendString(jsonMessage);
                     }
                 }
-                authToGameID.remove(secondCommand.getAuthString()); //Is this right?
+                authToGameID.remove(secondCommand.getAuthString());
                 authToSession.remove(secondCommand.getAuthString());
             } catch (Exception ex) {
                 return;
