@@ -76,9 +76,9 @@ public class WSServer {
                 ServerMessage newMessage = moveMessageGenerator(secondCommand, gameDAO, authDAO);
                 String jsonMessage = ConvertJSON.toJSON(newMessage);
 
-                for (Integer gameID : gameIDToAuth.keySet()) {
+                for (String newAuth : authToGameID.keySet()) {
+                    Integer gameID = authToGameID.get(newAuth);
                     if (gameID.equals(secondCommand.getGameID())) {
-                        String newAuth = gameIDToAuth.get(gameID);
                         Session newSession = authToSession.get(newAuth);
                         newSession.getRemote().sendString(jsonMessage);
                     }
@@ -98,16 +98,18 @@ public class WSServer {
                 } else {
                     gameDAO.dropUser(ChessGame.TeamColor.BLACK, game);
                 }
-                for (Integer gameID : gameIDToAuth.keySet()) {
+
+                NotificationMessage notification = new NotificationMessage(username + "has left the game");
+                String jsonMessage = ConvertJSON.toJSON(notification);
+
+                for (String newAuth : authToGameID.keySet()) {
+                    Integer gameID = authToGameID.get(newAuth);
                     if (gameID.equals(secondCommand.getGameID())) {
-                        String newAuth = gameIDToAuth.get(gameID);
-                        if (!newAuth.equals(secondCommand.getAuthString())) {
-                            Session newSession = authToSession.get(newAuth);
-                            newSession.getRemote().sendString(username + " has left the game"); //I still need to make this a json
-                        }
+                        Session newSession = authToSession.get(newAuth);
+                        newSession.getRemote().sendString(jsonMessage);
                     }
                 }
-                gameIDToAuth.values().removeIf(authToken -> authToken.equals(secondCommand.getAuthString())); //Is this right?
+                authToGameID.remove(secondCommand.getAuthString()); //Is this right?
                 authToSession.remove(secondCommand.getAuthString());
             } catch (Exception ex) {
                 return;
