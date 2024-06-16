@@ -82,15 +82,42 @@ public class WSServer {
         } else if (commandType == UserGameCommand.CommandType.MAKE_MOVE) {
             MakeMoveCommand secondCommand = ConvertJSON.fromJSON(message, MakeMoveCommand.class);
 
+
             try {
-                ServerMessage newMessage = moveMessageGenerator(secondCommand, gameDAO, authDAO);
-                String jsonMessage = ConvertJSON.toJSON(newMessage);
+
+                String jsonAlertMessage = null;
+
+                GameData game = gameDAO.getGame(secondCommand.getGameID());
+
+                ChessMove move = secondCommand.getMove();
+                ChessPosition startPosition = move.getStartPosition();
+                ChessPosition endPosition = move.getEndPosition();
+
+                String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+                game.getGame().makeMove(move);
+                String moveMessage = username + "has moved from " + startPosition + " to " + endPosition;
+                String jsonMessage = ConvertJSON.toJSON(moveMessage);
+
+                ServerMessage alertMessage = alertMessageGenerator(secondCommand, gameDAO, authDAO);
+
+                LoadGameMessage loadMessage = new LoadGameMessage(game.getGame());
+                String loadJson = ConvertJSON.toJSON(loadMessage);
+
+                if (alertMessage != null) {
+                    jsonAlertMessage = ConvertJSON.toJSON(alertMessage);
+                }
 
                 for (String newAuth : authToGameID.keySet()) {
                     Integer gameID = authToGameID.get(newAuth);
-                    if (gameID.equals(secondCommand.getGameID())) {
-                        Session newSession = authToSession.get(newAuth);
-                        newSession.getRemote().sendString(jsonMessage);
+                    Session newSession = authToSession.get(newAuth);
+                    if (gameID.equals(secondCommand.getGameID())) { //If I find an authToken associated with the current gameID
+                        if  (!newAuth.equals(secondCommand.getAuthString())) { //If it's not the authToken of the user making the move
+                            newSession.getRemote().sendString(jsonMessage); //Notify them of the move
+                        }
+                        newSession.getRemote().sendString(loadJson); //send everyone with the gameID a loadGame message
+                        if (alertMessage != null) {
+                            newSession.getRemote().sendString(jsonAlertMessage); //send everyone with the gameID an alert message, if it exists
+                        }
                     }
                 }
             } catch (Exception ex) {
@@ -114,7 +141,7 @@ public class WSServer {
 
                 for (String newAuth : authToGameID.keySet()) {
                     Integer gameID = authToGameID.get(newAuth);
-                    if (gameID.equals(secondCommand.getGameID())) {
+                    if (gameID.equals(secondCommand.getGameID()) && !newAuth.equals(secondCommand.getAuthString())) {
                         Session newSession = authToSession.get(newAuth);
                         newSession.getRemote().sendString(jsonMessage);
                     }
@@ -133,8 +160,8 @@ public class WSServer {
         }
     }
 
-    private ServerMessage moveMessageGenerator(MakeMoveCommand command, SQLGameDAO gameDAO, SQLAuthDAO authDAO) {
-        String message;
+    private ServerMessage alertMessageGenerator(MakeMoveCommand command, SQLGameDAO gameDAO, SQLAuthDAO authDAO) {
+        String message = null;
 
         ChessMove move = command.getMove();
         ChessPosition startPosition = command.getMove().getStartPosition();
@@ -146,9 +173,7 @@ public class WSServer {
             ChessGame game = gameDAO.getGame(command.getGameID()).getGame();
             GameData gameData = gameDAO.getGame(command.getGameID());
 
-            String username = authDAO.verifyAuth(command.getAuthString()).username();
-            game.makeMove(move);
-            message = username + "has moved from " + startPosition + " to " + endPosition; //I should modify the toString() method in my ChessPosition class, or implement a new method within that class
+            String username = authDAO.verifyAuth(command.getAuthString()).username(); //I should modify the toString() method in my ChessPosition class, or implement a new method within that class
             if (game.getTeamTurn().equals(ChessGame.TeamColor.WHITE)) {
                 defColor = ChessGame.TeamColor.BLACK;
             } else {
@@ -156,26 +181,27 @@ public class WSServer {
             }
             if (game.isInCheck(defColor)) {
                 if (defColor == ChessGame.TeamColor.BLACK) {
-                    message += "\n" + gameData.getBlackUsername() + "is in check";
+                    message = "\n" + gameData.getBlackUsername() + "is in check";
                 } else {
-                    message += "\n" + gameData.getWhiteUsername() + "is in check";
+                    message = "\n" + gameData.getWhiteUsername() + "is in check";
                 }
             } else if (game.isInCheckmate(defColor)) {
                 if (defColor == ChessGame.TeamColor.BLACK) {
-                    message += "\n" + gameData.getBlackUsername() + "is in checkmate";
+                    message = "\n" + gameData.getBlackUsername() + "is in checkmate";
                 } else {
-                    message += "\n" + gameData.getWhiteUsername() + "is in checkmate";
+                    message = "\n" + gameData.getWhiteUsername() + "is in checkmate";
                 } //I need to figure out how to handle when a game ends
             } else if (game.isInCheckmate(defColor) || game.isInCheckmate(game.getTeamTurn())) {
-                message += "\nThe game has ended in a stalemate.";
+                message = "\nThe game has ended in a stalemate.";
             }
-
-            return new NotificationMessage(message);
+            if (message != null) {
+                return new NotificationMessage(message);
+            } else {
+                return null;
+            }
 
         } catch (SQLException ex) {
             return null;
-        } catch (InvalidMoveException ex) {
-            return null; //This is a case I'll definitely have to consider, return an error message about an invalid move
         }
     }
 }
