@@ -1,12 +1,15 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessMove;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
+import com.google.gson.Gson;
 import model.GameData;
 import net.WSServerFacade;
+import websocket.commands.LeaveCommand;
 import websocket.commands.MakeMoveCommand;
+import websocket.commands.ResignCommand;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
@@ -76,9 +79,19 @@ public class InGame implements ServerMessageObserver {
                 option = "0";
             }
             else if (option.equals("5")) {
+                LeaveCommand leaveCommand = new LeaveCommand(authToken, game.getGameID());
+                facade.sendLeaveCommand(leaveCommand);
+
+                Postlogin postlogin = new Postlogin(authToken);
+                game = null;
+                postlogin.loggedInUI();
+
                 //send a leave game request
             }
             else if (option.equals("6")) {
+                ResignCommand resignCommand = new ResignCommand(authToken, game.getGameID());
+                facade.sendResignCommand(resignCommand);
+                option = "0";
                 //send a resign request
             }
             else {
@@ -110,6 +123,24 @@ public class InGame implements ServerMessageObserver {
     }
 
     public void notify(ServerMessage message) {
+        ServerMessage.ServerMessageType messageType = message.getServerMessageType();
+
+        if (message.getServerMessageType().equals(ServerMessage.ServerMessageType.NOTIFICATION)) {
+            NotificationMessage notificationMessage = (NotificationMessage) message;
+            System.out.println(notificationMessage.getMessage());
+
+                    //I should be able to cast message to a NotificationMessage type object here
+        } else if (message.getServerMessageType().equals(ServerMessage.ServerMessageType.LOAD_GAME)) {
+            LoadGameMessage loadGameMessage = (LoadGameMessage) message;
+            ChessGame game = loadGameMessage.getGame();
+            DrawChessBoard drawChessBoard = new DrawChessBoard();
+            drawChessBoard.drawChessBoard(game, "WHITE");
+
+        } else if (message.getServerMessageType().equals(ServerMessage.ServerMessageType.ERROR)) {
+            ErrorMessage errorMessage = (ErrorMessage) message;
+            System.out.println(errorMessage);
+        }
+
         //What do I have to make this method do?
         //Here is where I print output to the screen depending on the message, make sure I'm not just printing jsons
         //Things like printing out the message of a notification, etc.

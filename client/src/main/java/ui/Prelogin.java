@@ -45,7 +45,7 @@ public class Prelogin {
                 try {
                     LoginResult res = serverFacade.sendLoginRequest(req);
                     System.out.println("You are logged in as " + res.username());
-                    Postlogin postlogin = new Postlogin(res.username(), res.authToken());
+                    Postlogin postlogin = new Postlogin(res.authToken());
                     postlogin.loggedInUI();
 
                 } catch (Exception ex) {
@@ -71,7 +71,7 @@ public class Prelogin {
                 try {
                     RegisterResult res = serverFacade.sendRegisterRequest(req);
                     System.out.println("You have registered with the username " + res.username());
-                    Postlogin postlogin = new Postlogin(res.username(), res.authToken());
+                    Postlogin postlogin = new Postlogin(res.authToken());
                     postlogin.loggedInUI();
 
                 } catch (Exception ex) {

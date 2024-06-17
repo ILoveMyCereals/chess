@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessGame;
+import net.WSServerFacade;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
 import requests.ListGamesRequest;
@@ -10,18 +12,17 @@ import results.ListGamesResult;
 import results.LogoutResult;
 import model.GameData;
 import net.ServerFacade;
+import websocket.commands.ConnectCommand;
 
 import java.util.Scanner;
 
 public class Postlogin {
 
     private ServerFacade serverFacade = new ServerFacade(8080);
-    private String username;
     private String authToken;
     private String option = "0";
 
-    public Postlogin(String username, String authToken) {
-        this.username = username;
+    public Postlogin(String authToken) {
         this.authToken = authToken;
     }
 
@@ -70,8 +71,13 @@ public class Postlogin {
                             GameData savedGame = res1.games().get(counter);
                             JoinGameRequest req = new JoinGameRequest(playerColor, savedGame.getGameID());
                             JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
-                            DrawChessBoard draw = new DrawChessBoard();
-                            draw.drawChessBoard(playerColor);
+
+                            InGame inGame = new InGame(savedGame, authToken);
+                            WSServerFacade newFacade = new WSServerFacade(8080, inGame);
+
+                            ConnectCommand connectCommand = new ConnectCommand(authToken, savedGame.getGameID());
+                            newFacade.sendConnectCommand(connectCommand);
+                            inGame.inGameUI(); //I think this has been implemented correctly
                             option = "0";
                         }
                     }
@@ -87,9 +93,10 @@ public class Postlogin {
                 JoinGameRequest req = new JoinGameRequest(null, Integer.parseInt(gameID));
 
                 try {
-                    //JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+                    JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+                    ChessGame game = new ChessGame();
                     DrawChessBoard draw = new DrawChessBoard();
-                    draw.drawChessBoard("WHITE");
+                    draw.drawChessBoard(game, "WHITE"); //I need to revisit this too
                     option = "0";
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());

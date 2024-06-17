@@ -56,10 +56,10 @@ public class DrawChessBoard {
 
 
     public static void main(String[] args) {
-        drawChessBoard("WHITE");
+        drawChessBoard(new ChessGame(), "WHITE");
     }
 
-    public static void drawChessBoard(String teamColor) {
+    public static void drawChessBoard(ChessGame game, String teamColor) {
         board.resetBoard();
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);

@@ -4,6 +4,9 @@ package net;
 import com.google.gson.Gson;
 import ui.InGame;
 import websocket.commands.*;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 import javax.swing.*;
@@ -25,8 +28,17 @@ public class WSServerFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 public void onMessage(String message) {
                     ServerMessage firstMessage = new Gson().fromJson(message, ServerMessage.class);
+                    if (firstMessage.getServerMessageType().equals(ServerMessage.ServerMessageType.NOTIFICATION)) {
+                        NotificationMessage secondMessage = new Gson().fromJson(message, NotificationMessage.class);
+                        ui.notify(secondMessage);
+                    } else if (firstMessage.getServerMessageType().equals(ServerMessage.ServerMessageType.LOAD_GAME)) {
+                        LoadGameMessage secondMessage = new Gson().fromJson(message, LoadGameMessage.class);
+                        ui.notify(secondMessage);
+                    } else if (firstMessage.getServerMessageType().equals(ServerMessage.ServerMessageType.ERROR)) {
+                        ErrorMessage secondMessage = new Gson().fromJson(message, ErrorMessage.class);
+                        ui.notify(secondMessage);
+                    }
                     //deserialize message and put in notify
-                    ui.notify(firstMessage);
                 }
             });
         } catch (Exception ex) {
