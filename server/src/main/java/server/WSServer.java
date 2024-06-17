@@ -102,6 +102,8 @@ public class WSServer {
                     session.getRemote().sendString(jsonErrorMessage);
                     return;
                 }
+
+                if (game.getWhiteUsername().equals(username) || game.getBlackUsername().equals(username)) {
                 game.getGame().makeMove(move);
                 String moveMessage = username + " has moved from " + startPosition + " to " + endPosition;
                 String jsonMessage = ConvertJSON.toJSON(moveMessage);
@@ -119,7 +121,7 @@ public class WSServer {
                     Integer gameID = authToGameID.get(newAuth);
                     Session newSession = authToSession.get(newAuth);
                     if (gameID.equals(secondCommand.getGameID())) { //If I find an authToken associated with the current gameID
-                        if  (!newAuth.equals(secondCommand.getAuthString())) { //If it's not the authToken of the user making the move
+                        if (!newAuth.equals(secondCommand.getAuthString())) { //If it's not the authToken of the user making the move
                             newSession.getRemote().sendString(jsonMessage); //Notify them of the move
                         }
                         newSession.getRemote().sendString(loadJson); //send everyone with the gameID a loadGame message
@@ -127,6 +129,11 @@ public class WSServer {
                             newSession.getRemote().sendString(jsonAlertMessage); //send everyone with the gameID an alert message, if it exists
                         }
                     }
+                }
+                } else {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: cannot make a move as an observer");
+                    String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonMessage);
                 }
             } catch (InvalidMoveException ex) {
                 ErrorMessage errorMessage = new ErrorMessage("Error: invalid move");
