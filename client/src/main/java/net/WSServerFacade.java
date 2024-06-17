@@ -1,19 +1,75 @@
 package net;
 
 
-import javax.websocket.ContainerProvider;
-import javax.websocket.Endpoint;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
+import com.google.gson.Gson;
+import ui.InGame;
+import websocket.commands.*;
+import websocket.messages.ServerMessage;
 
-public class WSServerFacade extends Endpoint { //I have to include an overriding onOpen method, I won't have to write anything for the method itself
+import javax.swing.*;
+import javax.websocket.*;
+import java.net.URI;
+
+public class WSServerFacade extends Endpoint {
 
     private Session session;
 
     private String uristub;
 
-    public WSServerFacade(Integer port) {
-        uristub = "ws://localhost:" + Integer.toString(port);
-        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+    public WSServerFacade(Integer port, InGame ui) {
+        try {
+            uristub = "ws://localhost:" + Integer.toString(port) + "/ws";
+            URI uri = new URI(uristub);
+            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            this.session = container.connectToServer(this, uri);
+            this.session.addMessageHandler(new MessageHandler.Whole<String>() {
+                public void onMessage(String message) {
+                    ServerMessage firstMessage = new Gson().fromJson(message, ServerMessage.class);
+                    //deserialize message and put in notify
+                    ui.notify(firstMessage);
+                }
+            });
+        } catch (Exception ex) {
+            return;
+        }
     }
+
+    public void sendConnectCommand(ConnectCommand command) {
+        String jsonCommand = new Gson().toJson(command);
+        try {
+            this.session.getBasicRemote().sendText(jsonCommand);
+        } catch (Exception ex) {
+            return;
+        }
+    }
+
+    public void sendMoveCommand(MakeMoveCommand command) {
+        String jsonCommand = new Gson().toJson(command);
+        try {
+            this.session.getBasicRemote().sendText(jsonCommand);
+        } catch (Exception ex) {
+            return;
+        }
+    }
+
+    public void sendLeaveCommand(LeaveCommand command) {
+        String jsonCommand = new Gson().toJson(command);
+        try {
+            this.session.getBasicRemote().sendText(jsonCommand);
+        } catch (Exception ex) {
+            return;
+        }
+    }
+
+    public void sendResignCommand(ResignCommand command) {
+        String jsonCommand = new Gson().toJson(command);
+        try {
+            this.session.getBasicRemote().sendText(jsonCommand);
+        } catch (Exception ex) {
+            return;
+        }
+    }
+
+    @Override
+    public void onOpen(Session session, EndpointConfig endpointConfig) {}
 }

@@ -5,15 +5,18 @@ import chess.ChessMove;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import model.GameData;
+import net.WSServerFacade;
 import websocket.commands.MakeMoveCommand;
+import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
 
-public class InGame {
+public class InGame implements ServerMessageObserver {
 
     private String option = "0";
     private GameData game;
     private String authToken;
+    private WSServerFacade facade = new WSServerFacade(8080, this);
 
     public InGame(GameData game, String authToken) {
         this.game = game;
@@ -50,6 +53,9 @@ public class InGame {
                 ChessMove move = new ChessMove(startPosition, endPosition, null); //How do I handle the promotion portion of the chessmove?
 
                 MakeMoveCommand moveCommand = new MakeMoveCommand(authToken, game.getGameID(), move);
+
+                facade.sendMoveCommand(moveCommand);
+
                 //send make move command
             }
             else if (option.equals("2")) {
@@ -101,5 +107,12 @@ public class InGame {
         }
         ChessPosition newPosition = new ChessPosition(rowInt, columnInt);
         return newPosition;
+    }
+
+    public void notify(ServerMessage message) {
+        //What do I have to make this method do?
+        //Here is where I print output to the screen depending on the message, make sure I'm not just printing jsons
+        //Things like printing out the message of a notification, etc.
+        return;
     }
 }
