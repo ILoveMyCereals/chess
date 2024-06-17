@@ -60,7 +60,9 @@ public class DrawChessBoard {
     }
 
     public static void drawChessBoard(ChessGame game, String teamColor) {
-        board.resetBoard();
+        //board.resetBoard();
+
+        board = game.getBoard();
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
@@ -77,6 +79,32 @@ public class DrawChessBoard {
 
         out.print(RESET_BG_COLOR);
         out.print(RESET_TEXT_COLOR);
+
+        ArrayList<String> rows2 = new ArrayList<String>() {
+            {
+                add("1");
+                add("2");
+                add("3");
+                add("4");
+                add("5");
+                add("6");
+                add("7");
+                add("8");
+            }
+        };
+
+        rows1 = new ArrayList<String>() {
+            {
+                add("8");
+                add("7");
+                add("6");
+                add("5");
+                add("4");
+                add("3");
+                add("2");
+                add("1");
+            }
+        };
     }
 
     private static void drawHeaders(PrintStream out, String teamColor) {

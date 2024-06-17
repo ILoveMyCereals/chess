@@ -58,13 +58,17 @@ public class InGame implements ServerMessageObserver {
                 MakeMoveCommand moveCommand = new MakeMoveCommand(authToken, game.getGameID(), move);
 
                 facade.sendMoveCommand(moveCommand);
-
+                option = "0";
                 //send make move command
             }
             else if (option.equals("2")) {
+                DrawChessBoard drawChessBoard = new DrawChessBoard();
+                drawChessBoard.drawChessBoard(game.getGame(), "WHITE");
+                option = "0";
                 //redraw board
             }
             else if (option.equals("3")) {
+                option = "0";
                 //highlight legal moves
             }
             else if (option.equals("4")) {
@@ -83,7 +87,7 @@ public class InGame implements ServerMessageObserver {
                 facade.sendLeaveCommand(leaveCommand);
 
                 Postlogin postlogin = new Postlogin(authToken);
-                game = null;
+                //game = null;
                 postlogin.loggedInUI();
 
                 //send a leave game request
@@ -107,7 +111,7 @@ public class InGame implements ServerMessageObserver {
 
     private ChessPosition getPositionFromInput(String readablePosition) {
         Integer columnInt = null;
-        String[] columns = {"a", "b", "c", "d", "e", "f", "g", "h"};
+        Character[] columns = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
         Character columnChar = readablePosition.charAt(0);
         Character rowChar = readablePosition.charAt(1);
@@ -138,7 +142,7 @@ public class InGame implements ServerMessageObserver {
 
         } else if (message.getServerMessageType().equals(ServerMessage.ServerMessageType.ERROR)) {
             ErrorMessage errorMessage = (ErrorMessage) message;
-            System.out.println(errorMessage);
+            System.out.println(errorMessage.getErrorMessage());
         }
 
         //What do I have to make this method do?

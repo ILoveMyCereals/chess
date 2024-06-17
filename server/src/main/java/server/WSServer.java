@@ -155,14 +155,22 @@ public class WSServer {
                 try {
                     session.getRemote().sendString(jsonMessage);
                 } catch (Exception ex1) {
-                    return;
+                    return; //don't bother
                 }
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 try {
                     ErrorMessage errorMessage = new ErrorMessage("Error: unauthorized");
                     String jsonMessage = ConvertJSON.toJSON(errorMessage);
                     session.getRemote().sendString(jsonMessage);
                 } catch (Exception ex1) {
+                    return; //don't bother
+                }
+            } catch (IOException ex) {
+                try {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: IOException");
+                    String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonMessage);
+                } catch (Exception ex2) {
                     return;
                 }
             }
@@ -192,7 +200,13 @@ public class WSServer {
                 authToGameID.remove(secondCommand.getAuthString());
                 authToSession.remove(secondCommand.getAuthString());
             } catch (Exception ex) {
-                return;
+                ErrorMessage errorMessage = new ErrorMessage("Error 1");
+                String json = ConvertJSON.toJSON(errorMessage);
+                try {
+                    session.getRemote().sendString(json);
+                } catch (Exception ex1) {
+                    return; //don't bother
+                }
             }
 
         } else if (commandType == UserGameCommand.CommandType.RESIGN) {
@@ -226,11 +240,17 @@ public class WSServer {
                     session.getRemote().sendString(jsonMessage);
                 }
             } catch (Exception ex) {
-                return; //I'll have to consider this exception
+                    ErrorMessage errorMessage = new ErrorMessage("Error 2");
+                    String json = ConvertJSON.toJSON(errorMessage);
+                    try {
+                        session.getRemote().sendString(json);
+                    } catch (Exception ex1) {
+                        return; //don't bother
+                    }
+                }
             }
 
         }
-    }
 
     private ServerMessage alertMessageGenerator(MakeMoveCommand command, SQLGameDAO gameDAO, SQLAuthDAO authDAO) {
         String message = null;

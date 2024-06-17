@@ -48,7 +48,7 @@ public class Postlogin {
 
                 try {
                     CreateGameResult res = serverFacade.sendCreateGameRequest(req, authToken);
-                    System.out.println("You have created a new game with the following ID: " + res.gameID());
+                    //System.out.println("You have created a new game with the following ID: " + res.gameID());
                     option = "0";
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -90,18 +90,28 @@ public class Postlogin {
                 System.out.println("Please enter the game ID (not the game name) of the game you wish to observe ");
                 String gameID = newScan.nextLine();
 
-                JoinGameRequest req = new JoinGameRequest(null, Integer.parseInt(gameID));
-
+                ListGamesRequest req1 = new ListGamesRequest();
                 try {
-                    JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
-                    ChessGame game = new ChessGame();
-                    DrawChessBoard draw = new DrawChessBoard();
-                    draw.drawChessBoard(game, "WHITE"); //I need to revisit this too
-                    option = "0";
+                    ListGamesResult res1 = serverFacade.sendListGamesRequest(req1, authToken);
+                    for (int counter = 0; counter < res1.games().size(); counter++) {
+                        GameData game = res1.games().get(counter);
+                        if (counter == Integer.parseInt(gameID)) {
+                            GameData savedGame = res1.games().get(counter);
+                            //JoinGameRequest req = new JoinGameRequest(playerColor, savedGame.getGameID());
+                            //JoinGameResult res = serverFacade.sendJoinGameRequest(req, authToken);
+
+                            InGame inGame = new InGame(savedGame, authToken);
+                            WSServerFacade newFacade = new WSServerFacade(8080, inGame);
+
+                            ConnectCommand connectCommand = new ConnectCommand(authToken, savedGame.getGameID());
+                            newFacade.sendConnectCommand(connectCommand);
+                            inGame.inGameUI(); //I think this has been implemented correctly
+                            option = "0";
+                        }
+                    }
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     option = "0";
-
                 }
             } else if (option.equals("4")) {
                 ListGamesRequest req = new ListGamesRequest();
