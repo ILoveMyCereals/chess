@@ -144,7 +144,13 @@ public class WSServer {
                     return;
                 }
             } catch (Exception ex) {
-                return;
+                try {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: unauthorized");
+                    String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonMessage);
+                } catch (Exception ex1) {
+                    return;
+                }
             }
 
         } else if (commandType == UserGameCommand.CommandType.LEAVE) {
