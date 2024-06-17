@@ -7,7 +7,7 @@ import chess.InvalidMoveException;
 import dataaccess.sqldao.SQLAuthDAO;
 import handlers.ConvertJSON;
 import model.GameData;
-import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.Session; //I may or may not have to change this to javax
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import spark.Spark;
@@ -90,8 +90,8 @@ public class WSServer {
 
                 String jsonAlertMessage = null;
 
-                GameData game = gameDAO.getGame(secondCommand.getGameID());
                 ChessMove move = secondCommand.getMove();
+                GameData game = gameDAO.getGame(secondCommand.getGameID());
                 String startPosition = move.getStartPosition().getReadablePosition();
                 String endPosition = move.getEndPosition().getReadablePosition();
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
@@ -103,10 +103,24 @@ public class WSServer {
                     return;
                 }
 
+                if (!game.getBlackUsername().equals(username) && game.getGame().getTeamTurn() == ChessGame.TeamColor.BLACK) {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: it is not your turn");
+                    String jsonErrorMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonErrorMessage);
+                    return;
+                } else if (!game.getWhiteUsername().equals(username) && game.getGame().getTeamTurn() == ChessGame.TeamColor.WHITE) {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: it is not your turn");
+                    String jsonErrorMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonErrorMessage);
+                    return;
+                }
+
                 if (game.getWhiteUsername().equals(username) || game.getBlackUsername().equals(username)) {
                 game.getGame().makeMove(move);
+                gameDAO.updateGame(secondCommand.getGameID(), game.getGame());
                 String moveMessage = username + " has moved from " + startPosition + " to " + endPosition;
-                String jsonMessage = ConvertJSON.toJSON(moveMessage);
+                NotificationMessage notification = new NotificationMessage(moveMessage);
+                String jsonMessage = ConvertJSON.toJSON(notification);
 
                 ServerMessage alertMessage = alertMessageGenerator(secondCommand, gameDAO, authDAO);
 
@@ -120,7 +134,7 @@ public class WSServer {
                 for (String newAuth : authToGameID.keySet()) {
                     Integer gameID = authToGameID.get(newAuth);
                     Session newSession = authToSession.get(newAuth);
-                    if (gameID.equals(secondCommand.getGameID())) { //If I find an authToken associated with the current gameID
+                    if (gameID.equals(secondCommand.getGameID()) && newSession.isOpen()) { //If I find an authToken associated with the current gameID
                         if (!newAuth.equals(secondCommand.getAuthString())) { //If it's not the authToken of the user making the move
                             newSession.getRemote().sendString(jsonMessage); //Notify them of the move
                         }
@@ -221,10 +235,6 @@ public class WSServer {
     private ServerMessage alertMessageGenerator(MakeMoveCommand command, SQLGameDAO gameDAO, SQLAuthDAO authDAO) {
         String message = null;
 
-        ChessMove move = command.getMove();
-        ChessPosition startPosition = command.getMove().getStartPosition();
-        ChessPosition endPosition = command.getMove().getEndPosition();
-
         try {
             ChessGame.TeamColor defColor;
 
@@ -249,6 +259,7 @@ public class WSServer {
                 } else {
                     message = "\n" + gameData.getWhiteUsername() + "is in checkmate";
                 } //I need to figure out how to handle when a game ends
+                gameToIsInPlay.put(command.getGameID(), false);
             } else if (game.isInCheckmate(defColor) || game.isInCheckmate(game.getTeamTurn())) {
                 message = "\nThe game has ended in a stalemate.";
             }

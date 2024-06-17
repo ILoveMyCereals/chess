@@ -56,8 +56,8 @@ public class ChessPosition {
 
         String[] columns = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
-        String columnString = columns[colPosition];
-        String rowString = Integer.toString(rowPosition);
+        String columnString = columns[colPosition - 1];
+        String rowString = Integer.toString(rowPosition - 1);
 
         return columnString+rowString;
     }

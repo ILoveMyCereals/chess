@@ -127,6 +127,19 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    public void updateGame(Integer gameID, ChessGame newGame) {
+        var json = ConvertJSON.toJSON(newGame);
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("UPDATE Game SET game=? WHERE gameID = ?")) {
+                preparedStatement.setString(1, json);
+                preparedStatement.setInt(2, gameID);
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception ex) {
+            return;
+        }
+    }
+
     public void clearGames() throws SQLException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("TRUNCATE TABLE Game")) {
