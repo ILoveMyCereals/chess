@@ -28,7 +28,7 @@ import java.util.Map;
 @WebSocket
 public class WSServer {
 
-    private Map <String, Integer> authToGameID = new HashMap<>(); // I need to change this to authToGameID, the way I have it now only allows one user per game
+    private Map <String, Integer> authToGameID = new HashMap<>();
     private Map <String, Session> authToSession = new HashMap<>();
     private Map <Integer, Boolean> gameToIsInPlay = new HashMap<>();
 
@@ -92,8 +92,8 @@ public class WSServer {
 
                 GameData game = gameDAO.getGame(secondCommand.getGameID());
                 ChessMove move = secondCommand.getMove();
-                ChessPosition startPosition = move.getStartPosition();
-                ChessPosition endPosition = move.getEndPosition();
+                String startPosition = move.getStartPosition().getReadablePosition();
+                String endPosition = move.getEndPosition().getReadablePosition();
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
 
                 if (!gameToIsInPlay.containsKey(secondCommand.getGameID()) || !gameToIsInPlay.get(secondCommand.getGameID())) {
@@ -103,7 +103,7 @@ public class WSServer {
                     return;
                 }
                 game.getGame().makeMove(move);
-                String moveMessage = username + "has moved from " + startPosition + " to " + endPosition;
+                String moveMessage = username + " has moved from " + startPosition + " to " + endPosition;
                 String jsonMessage = ConvertJSON.toJSON(moveMessage);
 
                 ServerMessage alertMessage = alertMessageGenerator(secondCommand, gameDAO, authDAO);
@@ -127,6 +127,14 @@ public class WSServer {
                             newSession.getRemote().sendString(jsonAlertMessage); //send everyone with the gameID an alert message, if it exists
                         }
                     }
+                }
+            } catch (InvalidMoveException ex) {
+                ErrorMessage errorMessage = new ErrorMessage("Error: invalid move");
+                String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                try {
+                    session.getRemote().sendString(jsonMessage);
+                } catch (Exception ex1) {
+                    return;
                 }
             } catch (Exception ex) {
                 return;

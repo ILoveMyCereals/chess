@@ -44,6 +44,24 @@ public class ChessPosition {
         return colPosition;
     }
 
+    @Override
+    public String toString() {
+        return "ChessPosition{" +
+                "rowPosition=" + rowPosition +
+                ", colPosition=" + colPosition +
+                '}';
+    }
+
+    public String getReadablePosition() {
+
+        String[] columns = {"a", "b", "c", "d", "e", "f", "g", "h"};
+
+        String columnString = columns[colPosition];
+        String rowString = Integer.toString(rowPosition);
+
+        return columnString+rowString;
+    }
+
     private int rowPosition;
     private int colPosition;
 }
