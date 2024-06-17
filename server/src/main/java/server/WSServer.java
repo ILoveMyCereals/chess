@@ -163,21 +163,32 @@ public class WSServer {
         } else if (commandType == UserGameCommand.CommandType.RESIGN) {
             ResignCommand secondCommand = ConvertJSON.fromJSON(message, ResignCommand.class);
 
-            if (gameToIsInPlay.containsKey(secondCommand.getGameID()) && gameToIsInPlay.get(secondCommand.getGameID())) {
-                gameToIsInPlay.put(secondCommand.getGameID(), false);
-            }
-
             try {
+                GameData game = gameDAO.getGame(secondCommand.getGameID());
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
-                NotificationMessage notification = new NotificationMessage(username + "has resigned");
-                String jsonMessage = ConvertJSON.toJSON(notification);
 
-                for (String newAuth : authToGameID.keySet()) {
-                    Integer gameID = authToGameID.get(newAuth);
-                    if (gameID.equals(secondCommand.getGameID())) {
-                        Session newSession = authToSession.get(newAuth);
-                        newSession.getRemote().sendString(jsonMessage);
+                if (game.getWhiteUsername().equals(username) || game.getBlackUsername().equals(username)) {
+                    if (gameToIsInPlay.containsKey(secondCommand.getGameID()) && gameToIsInPlay.get(secondCommand.getGameID())) {
+                        gameToIsInPlay.put(secondCommand.getGameID(), false);
+                        NotificationMessage notification = new NotificationMessage(username + "has resigned");
+                        String jsonMessage = ConvertJSON.toJSON(notification);
+
+                        for (String newAuth : authToGameID.keySet()) {
+                            Integer gameID = authToGameID.get(newAuth);
+                            if (gameID.equals(secondCommand.getGameID())) {
+                                Session newSession = authToSession.get(newAuth);
+                                newSession.getRemote().sendString(jsonMessage);
+                            }
+                        }
+                    } else {
+                        ErrorMessage errorMessage = new ErrorMessage("Error: game cannot be resigned");
+                        String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                        session.getRemote().sendString(jsonMessage);
                     }
+                } else {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: you cannot resign as an observer");
+                    String jsonMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonMessage);
                 }
             } catch (Exception ex) {
                 return; //I'll have to consider this exception
