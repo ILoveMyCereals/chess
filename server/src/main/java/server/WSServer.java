@@ -30,6 +30,7 @@ public class WSServer {
 
     private Map <String, Integer> authToGameID = new HashMap<>(); // I need to change this to authToGameID, the way I have it now only allows one user per game
     private Map <String, Session> authToSession = new HashMap<>();
+    private Map <Integer, Boolean> gameToIsInPlay = new HashMap<>();
 
     public static void main(String[] args) {
         Spark.port(8080);
@@ -53,6 +54,9 @@ public class WSServer {
 
                 authToGameID.put(secondCommand.getAuthString(), secondCommand.getGameID());
                 authToSession.put(secondCommand.getAuthString(), session);
+                if (!gameToIsInPlay.containsKey(secondCommand.getGameID())) { //If the game is not in the gameisinplay map
+                    gameToIsInPlay.put(secondCommand.getGameID(), true);
+                }
 
                 NotificationMessage notification = new NotificationMessage(username + " has joined the game");
                 String jsonMessage = ConvertJSON.toJSON(notification);
@@ -82,18 +86,22 @@ public class WSServer {
         } else if (commandType == UserGameCommand.CommandType.MAKE_MOVE) {
             MakeMoveCommand secondCommand = ConvertJSON.fromJSON(message, MakeMoveCommand.class);
 
-
             try {
 
                 String jsonAlertMessage = null;
 
                 GameData game = gameDAO.getGame(secondCommand.getGameID());
-
                 ChessMove move = secondCommand.getMove();
                 ChessPosition startPosition = move.getStartPosition();
                 ChessPosition endPosition = move.getEndPosition();
-
                 String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+
+                if (!gameToIsInPlay.containsKey(secondCommand.getGameID()) || !gameToIsInPlay.get(secondCommand.getGameID())) {
+                    ErrorMessage errorMessage = new ErrorMessage("Error: game cannot be played");
+                    String jsonErrorMessage = ConvertJSON.toJSON(errorMessage);
+                    session.getRemote().sendString(jsonErrorMessage);
+                    return;
+                }
                 game.getGame().makeMove(move);
                 String moveMessage = username + "has moved from " + startPosition + " to " + endPosition;
                 String jsonMessage = ConvertJSON.toJSON(moveMessage);
@@ -154,8 +162,26 @@ public class WSServer {
 
         } else if (commandType == UserGameCommand.CommandType.RESIGN) {
             ResignCommand secondCommand = ConvertJSON.fromJSON(message, ResignCommand.class);
-            //What do I do when a game ends?
-            //I can implement a boolean flag indicating whether or not the game is in play
+
+            if (gameToIsInPlay.containsKey(secondCommand.getGameID()) && gameToIsInPlay.get(secondCommand.getGameID())) {
+                gameToIsInPlay.put(secondCommand.getGameID(), false);
+            }
+
+            try {
+                String username = authDAO.verifyAuth(secondCommand.getAuthString()).username();
+                NotificationMessage notification = new NotificationMessage(username + "has resigned");
+                String jsonMessage = ConvertJSON.toJSON(notification);
+
+                for (String newAuth : authToGameID.keySet()) {
+                    Integer gameID = authToGameID.get(newAuth);
+                    if (gameID.equals(secondCommand.getGameID())) {
+                        Session newSession = authToSession.get(newAuth);
+                        newSession.getRemote().sendString(jsonMessage);
+                    }
+                }
+            } catch (Exception ex) {
+                return; //I'll have to consider this exception
+            }
 
         }
     }

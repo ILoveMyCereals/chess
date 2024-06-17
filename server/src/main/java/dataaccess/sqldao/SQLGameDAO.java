@@ -116,6 +116,11 @@ public class SQLGameDAO implements GameDAO {
                     preapredStatement.setInt(1, game.getGameID());
                     preapredStatement.executeUpdate();
                 }
+            } else if (teamColor == ChessGame.TeamColor.WHITE) {
+                try (var preparedStatement = conn.prepareStatement("UPDATE Game SET whiteusername=null WHERE gameID = ?")) {
+                    preparedStatement.setInt(1, game.getGameID());
+                    preparedStatement.executeUpdate();
+                }
             }
         } catch (DataAccessException ex) {
             return;
